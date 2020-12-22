@@ -51,7 +51,7 @@ let compare = (pwtext, hash) => new Promise((resolve, reject) => {
   });
 })
 
-let countHowManyUsers = async () => {
+let countHowManyUsers = module.exports.countHowManyUsers = async () => {
   let result = await mongodb.User.countDocuments({})
 
   if (result) {

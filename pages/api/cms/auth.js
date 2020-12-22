@@ -33,6 +33,10 @@ module.exports = async (req, res) => {
     } else if (req.body.action === 'register') {
       try {
         let { username, email, password } = req.body.data || {}
+        let count = await Auth.countHowManyUsers()
+        if (count >= 1) {
+          throw new Error('Admin already registered')
+        }
 
         let result = await Auth.register({ username, email, password })
         /*

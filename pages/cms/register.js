@@ -26,11 +26,9 @@ export function RegisterSection () {
     <>
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
-
         .font-family-karla {
             font-family: karla;
         }
-
       `}</style>
 
         <div className="bg-white font-family-karla h-screen">
@@ -45,11 +43,11 @@ export function RegisterSection () {
                   <form onSubmit={onSubmit} className="flex flex-col pt-3 md:pt-8">
                       <div className="flex flex-col pt-4">
                           <label htmlFor="email" className="text-lg">Username</label>
-                          <input type="text" value={username} id="email" onInput={onKeyInfo(setUsername)} placeholder="your@email.com" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                          <input type="text" value={username} id="username" onInput={onKeyInfo(setUsername)} placeholder="yourusername" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
                       </div>
                       <div className="flex flex-col pt-4">
-                          <label htmlFor="email" className="text-lg">Username</label>
-                          <input type="text" value={email} id="email" onInput={onKeyInfo(setEmail)} placeholder="your@email.com" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                          <label htmlFor="email" className="text-lg">Email</label>
+                          <input type="email" value={email} id="email" onInput={onKeyInfo(setEmail)} placeholder="your@email.com" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
                       </div>
 
                       <div className="flex flex-col pt-4">
