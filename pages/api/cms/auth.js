@@ -1,5 +1,5 @@
 module.exports = async (req, res) => {
-  let Auth = require('../../../your-cms/auth.js')
+  let Auth = require('./core/auth.js')
 
   if (req.method === 'POST') {
     // res.json({

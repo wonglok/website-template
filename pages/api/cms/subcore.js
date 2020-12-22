@@ -1,6 +1,6 @@
 module.exports = async (req, res) => {
-  let Auth = require('../../../your-cms/auth.js')
-  let MongoDB = require('../../../your-cms/mongodb.js')
+  let Auth = require('./core/auth.js')
+  let MongoDB = require('./core/mongodb.js')
   let DocOperation = MongoDB.DocOperation
   let DocClass = MongoDB.SubCore
 
