@@ -3,7 +3,9 @@ const colors = require('tailwindcss/colors')
 module.exports = {
   purge: [
     './pages/**/*.js',
+    './public/**/*.js',
     './your-gui/**/*.js',
+    './your-backup/**/*.js',
     './your-cms/**/*.js'
   ],
   presets: [],
