@@ -1,8 +1,8 @@
+const slugify = require('slugify')
 const mongoose = require('mongoose');
 mongoose.set('useCreateIndex', true);
-const slugify = require('slugify')
-
-let KADB = process.env.MONGO_URL
+let DBNAME = `developerblog`
+let KADB = process.env.MONGO_URL || `mongodb://localhost:27017/${DBNAME}?readPreference=primary&appname=MongoDB%20Compass&ssl=false`
 mongoose.connect(KADB, { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true });
 
 let Schema = mongoose.Schema
@@ -31,7 +31,7 @@ SchemaExport.User = new Schema({
   }
 })
 
-module.exports.User = mongoose.model('User', SchemaExport.User);
+module.exports.User = mongoose.models.User || mongoose.model('User', SchemaExport.User);
 SchemaExport.Project = new Schema({
   featured: {
     type: Boolean,
@@ -59,7 +59,7 @@ SchemaExport.Project = new Schema({
   }
 })
 
-module.exports.Project = mongoose.model('Project', SchemaExport.Project);
+module.exports.Project = mongoose.models.Project || mongoose.model('Project', SchemaExport.Project);
 
 SchemaExport.SubCore = new Schema({
   userID: {
@@ -84,7 +84,7 @@ SchemaExport.SubCore = new Schema({
   }
 })
 
-module.exports.SubCore = mongoose.model('SubCore', SchemaExport.SubCore);
+module.exports.SubCore = mongoose.models.SubCore || mongoose.model('SubCore', SchemaExport.SubCore);
 
 SchemaExport.CodeBlock = new Schema({
   userID: {
@@ -110,7 +110,7 @@ SchemaExport.CodeBlock = new Schema({
   }
 })
 
-module.exports.CodeBlock = mongoose.model('CodeBlock', SchemaExport.CodeBlock);
+module.exports.CodeBlock = mongoose.models.CodeBlock || mongoose.model('CodeBlock', SchemaExport.CodeBlock);
 
 module.exports.DocOperation = class DocOperation {
   constructor ({ req, res, DocClass, Auth }) {

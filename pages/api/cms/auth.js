@@ -1,6 +1,6 @@
-let Auth = require('./shared/auth.js')
-
 module.exports = async (req, res) => {
+  let Auth = require('../../../your-cms/auth.js')
+
   if (req.method === 'POST') {
     // res.json({
     //   msg: 'ok',
@@ -20,6 +20,8 @@ module.exports = async (req, res) => {
           "jwt": "..."
         }
         */
+        console.log(result)
+
         res.status(200).json(result)
       } catch (e) {
         console.log(e)

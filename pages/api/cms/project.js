@@ -1,9 +1,9 @@
-let Auth = require('./shared/auth.js')
-let MongoDB = require('./shared/mongodb.js')
-let DocOperation = MongoDB.DocOperation
-let DocClass = MongoDB.Project
 
 module.exports = async (req, res) => {
+  let Auth = require('../../../your-cms/auth.js')
+  let MongoDB = require('../../../your-cms/mongodb.js')
+  let DocOperation = MongoDB.DocOperation
+  let DocClass = MongoDB.Project
   if (req.method === 'POST') {
     // res.json({
     //   msg: 'ok',

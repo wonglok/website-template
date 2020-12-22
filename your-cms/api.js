@@ -71,7 +71,7 @@ class SDKCore {
   }
   async login ({ identity, password }) {
     return this.axios({
-      url: '/api/auth',
+      url: '/api/cms/auth',
       baseURL: this.getBaseURL(),
       method: 'POST',
       data: {
@@ -94,7 +94,7 @@ class SDKCore {
   }
   async register ({ email, username, password }) {
     return this.axios({
-      url: '/api/auth',
+      url: '/api/cms/auth',
       baseURL: this.getBaseURL(),
       method: 'POST',
       data: {
@@ -343,8 +343,4 @@ export const runTestProject = async () => {
     let mine2 = await Project.listMine()
     console.log('list-mine', mine2)
   }
-}
-
-if (process.env.NODE_ENV === 'development') {
-  window.runTestProject = runTestProject
 }
