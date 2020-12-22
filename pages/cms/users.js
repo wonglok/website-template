@@ -8,7 +8,7 @@ export function CMSApp () {
   const router = useRouter()
   return (
     <div>
-      <CMSLayout cta={'Create a Post'} onClickCTA={() => {}}>
+      <CMSLayout cta={'Create a User'} onClickCTA={() => {}}>
         <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
           Users
         </h2>

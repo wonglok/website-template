@@ -23,7 +23,7 @@ export function MyLink ({ children, href }) {
 
   let className = children.props.className || ''
   if (router.pathname === href) {
-    className = `${className} selected`
+    className = `${className} py-2 shadow bg-white dark:bg-gray-200 rounded-lg`
   }
 
   return <Link href={href}>{React.cloneElement(children, { className })}</Link>
@@ -83,20 +83,34 @@ export function CMSLayout ({ children, onClickCTA = () => {}, cta }) {
 
         <button
           onClick={(onClickCTA)}
-          className="mt-8 flex items-center justify-between py-3 px-4 text-white
-          dark:text-gray-200 bg-green-400 dark:bg-green-500 rounded-lg shadow">
-          <span>{cta}</span>
-          <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
-          </svg>
+          className={"mt-8 flex items-center justify-center py-3 px-4 text-white dark:text-gray-200 bg-green-400 dark:bg-green-500 rounded-lg shadow"}>
+          <span>{cta || 'Welcome!'}</span>
         </button>
 
         <ul className="mt-2 text-gray-600">
           {/* <!-- Links --> */}
 
+          <MyLink href="/cms">
+            <li
+              className="mt-4 ">
+              <span href="#home" className="flex pl-4">
+                <svg
+                  className="fill-current h-5 w-5 dark:text-gray-300"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M12 13H7v5h5v2H5V10h2v1h5v2M8
+                    4v2H4V4h4m2-2H2v6h8V2m10 9v2h-4v-2h4m2-2h-8v6h8V9m-2
+                    9v2h-4v-2h4m2-2h-8v6h8v-6z"></path>
+                </svg>
+
+                <span className="ml-2 capitalize font-medium">CMS Home</span>
+              </span>
+            </li>
+          </MyLink>
+
           <MyLink href="/cms/posts">
             <li
-              className="mt-8 shadow py-2 bg-white dark:bg-gray-200 rounded-lg">
+              className="mt-4 ">
               <span href="#home" className="flex pl-4">
                 <svg
                   className="fill-current h-5 w-5 dark:text-gray-300"
@@ -112,7 +126,7 @@ export function CMSLayout ({ children, onClickCTA = () => {}, cta }) {
             </li>
           </MyLink>
 
-          {/* <li className="mt-8">
+          {/* <li className="mt-4">
             <a href="#home" className="flex">
               <svg
                 className="fill-current h-5 w-5 dark:text-gray-300"
@@ -131,9 +145,9 @@ export function CMSLayout ({ children, onClickCTA = () => {}, cta }) {
             </a>
           </li> */}
 
-        <Link href="/cms/users">
+        <MyLink href="/cms/users">
             <li
-              className="mt-8 shadow py-2 bg-white dark:bg-gray-200 rounded-lg
+              className="mt-4
              ">
               <span href="#home" className="flex pl-4">
                 <svg className="fill-current h-5 w-5" viewBox="0 0 24 24">
@@ -145,7 +159,7 @@ export function CMSLayout ({ children, onClickCTA = () => {}, cta }) {
                 <span className="ml-2 capitalize font-medium">users</span>
               </span>
             </li>
-          </Link>
+          </MyLink>
 
           {/* <li className="mt-8">
             <a href="#home" className="flex">
