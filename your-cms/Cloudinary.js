@@ -1,23 +1,24 @@
 import Image from "next/image";
 export const Cloudinary = ({
   src,
-  width = 240,
-  height = 750,
+  width = false,
+  height = false,
   loading = "lazy",
-  cloud = 'loklok-keystone'
+  cloud = 'loklok-keystone',
+  ...props
 }) => {
-  const hostUrl = `https://res.cloudinary.com/${cloud}/image/upload/q_auto,w_${width},h_${height}`;
+  const hostUrl = `https://res.cloudinary.com/${cloud}/image/upload/q_auto`;
+  if (width) {
+    hostUrl += `,w_${width}`
+  }
+  if (height) {
+    hostUrl += `,h_${height}`
+  }
 
   return (
-    <Image
-      class="object-center object-cover w-full h-full"
-      src={`${hostUrl}/${src}`}
-      alt="Picture of the author"
-      width={width}
-      height={height}
-      layout="responsive"
-      quality={10}
-      loading={loading}
+    <img
+      {...props}
+      src={`${hostUrl}${src}`}
     />
   );
 };

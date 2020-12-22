@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { DeckCTA } from '../your-gui/DeckCTA'
-import { DeckKeyVisual } from '../your-gui/DeckMainArt'
+import { DeckMainArt } from '../your-gui/DeckMainArt'
 export default function Home() {
   return (
     <div>
@@ -11,7 +11,7 @@ export default function Home() {
         <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png" />
         <link rel="icon" href="/fav/favicon.ico" />
       </Head>
-      <DeckKeyVisual></DeckKeyVisual>
+      <DeckMainArt></DeckMainArt>
       <DeckCTA></DeckCTA>
     </div>
   )

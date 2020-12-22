@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-export function DeckKeyVisual () {
+export function DeckMainArt ({ isFull = false }) {
   useEffect(() => {
     (function () {
         var CONFIG = {
@@ -361,7 +361,7 @@ export function DeckKeyVisual () {
 
 .deck86-hello {
   width: 100vw;
-  height: calc(100vh - 50px);
+  height: calc(100vh - ${isFull ? '0px' : '50px'});
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -371,7 +371,7 @@ export function DeckKeyVisual () {
 
 .deck86-hello-parallax {
   width: 100vmin;
-  height: calc(100vh - 50px);
+  height: calc(100vh - ${isFull ? '0px' : '50px'});
   position: relative;
   background-color: black;
 }
