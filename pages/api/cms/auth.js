@@ -33,6 +33,7 @@ module.exports = async (req, res) => {
     } else if (req.body.action === 'register') {
       try {
         let { username, email, password } = req.body.data || {}
+
         let result = await Auth.register({ username, email, password })
         /*
         {

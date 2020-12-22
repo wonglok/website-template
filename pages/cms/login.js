@@ -1,7 +1,8 @@
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { SDK } from '../../your-cms/api'
+import Head from 'next/head'
+import Link from 'next/link'
 
 function LoginSection () {
   const router = useRouter()
@@ -54,7 +55,7 @@ function LoginSection () {
                       <input type="submit" value="Log In" className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8" />
                   </form>
                   <div className="text-center pt-12 pb-12">
-                    <p>Don't have an account? <a href="/cms/register" className="underline font-semibold">Register here.</a></p>
+                    <p>Don't have an account? <Link href="/cms/register"><span  className="underline font-semibold">Register here.</span></Link></p>
                   </div>
               </div>
             </div>

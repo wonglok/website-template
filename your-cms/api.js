@@ -36,7 +36,7 @@ class LSStorage {
 
 class SDKCore {
   constructor ({ axios }) {
-    let AppName = 'CityGraphcis'
+    let AppName = '86DeckPortfolio'
     let onRemove = () => {
       window.dispatchEvent(new Event('app-logout'))
     }

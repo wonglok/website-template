@@ -19,6 +19,7 @@ export function RegisterSection () {
         setMessage(err)
       })
   }
+
   const onKeyInfo = setValue => e => setValue(e.target.value)
 
   return (

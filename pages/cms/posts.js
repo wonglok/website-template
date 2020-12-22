@@ -8,9 +8,9 @@ export function CMSApp () {
   const router = useRouter()
   return (
     <div>
-      <CMSLayout cta={'Create a Post'} onClickCTA={() => { router.push('/cms/posts') }}>
+      <CMSLayout cta={'Create a Post'} onClickCTA={() => {}}>
         <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
-          Welcome to CMS
+          Posts
         </h2>
         <div>
           123
@@ -25,8 +25,8 @@ export default function CMSLandingPage () {
   const [canShow, setCanShow] = useState(false)
   useEffect(() => {
     if (!SDK.isLoggedIn) {
-      router.push('/cms/login')
       setCanShow(false)
+      router.push('/cms/login')
     } else {
       setCanShow(true)
     }
@@ -38,7 +38,6 @@ export default function CMSLandingPage () {
         <title>86deck</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       {canShow ? <CMSApp></CMSApp> : null}
     </div>
   )

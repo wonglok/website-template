@@ -51,6 +51,16 @@ let compare = (pwtext, hash) => new Promise((resolve, reject) => {
   });
 })
 
+let countHowManyUsers = async () => {
+  let result = await mongodb.User.countDocuments({})
+
+  if (result) {
+    return result
+  } else {
+    return false
+  }
+}
+
 let getUserByIdentity = async ({ identity }) => {
   let result = await mongodb.User.findOne({
     $or: [
@@ -104,8 +114,6 @@ module.exports.checkIdentity = async ({ identity }) => {
 }
 
 module.exports.register = async ({ username, password, email }) => {
-  // let data = await arc.tables()
-
   if (!username || !email || !password) {
     return Promise.reject(new Error('missing info'))
   }
@@ -120,12 +128,14 @@ module.exports.register = async ({ username, password, email }) => {
   let passwordHash = await getHash(password)
   // let compared = await compare(password, passwordHash)
 
+  let howMany = await countHowManyUsers()
+
   let newUsr = new mongodb.User({
     displayName: username,
     username,
     passwordHash,
     email,
-    isAdmin: false,
+    isAdmin: howMany === 0,
     roles: [{ role: 'guest' }]
   })
   newUsr = await newUsr.save()
