@@ -32,6 +32,37 @@ SchemaExport.User = new Schema({
 })
 
 module.exports.User = mongoose.models.User || mongoose.model('User', SchemaExport.User);
+
+//-----------------------
+
+SchemaExport.Posts = new Schema({
+  featured: {
+    type: Boolean,
+    default: false
+  },
+
+  userID: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  title: String,
+  text: String,
+  slug: {
+    type: String,
+    unique: true,
+    index: true
+  },
+}, {
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+})
+
+module.exports.Posts = mongoose.models.Posts || mongoose.model('Posts', SchemaExport.Posts);
+
+//-----------------------
+
 SchemaExport.Project = new Schema({
   featured: {
     type: Boolean,
@@ -59,7 +90,12 @@ SchemaExport.Project = new Schema({
   }
 })
 
+
 module.exports.Project = mongoose.models.Project || mongoose.model('Project', SchemaExport.Project);
+
+//-----------------------
+
+
 
 SchemaExport.SubCore = new Schema({
   userID: {
@@ -86,6 +122,9 @@ SchemaExport.SubCore = new Schema({
 
 module.exports.SubCore = mongoose.models.SubCore || mongoose.model('SubCore', SchemaExport.SubCore);
 
+//-----------------------
+
+
 SchemaExport.CodeBlock = new Schema({
   userID: {
     type: Schema.Types.ObjectId,
@@ -111,6 +150,8 @@ SchemaExport.CodeBlock = new Schema({
 })
 
 module.exports.CodeBlock = mongoose.models.CodeBlock || mongoose.model('CodeBlock', SchemaExport.CodeBlock);
+
+//-----------------------
 
 module.exports.DocOperation = class DocOperation {
   constructor ({ req, res, DocClass, Auth }) {
