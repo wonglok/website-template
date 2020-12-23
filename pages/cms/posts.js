@@ -41,7 +41,9 @@ export default function CMSLandingPage () {
         <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png" />
         <link rel="icon" href="/fav/favicon.ico" />
       </Head>
-      {canShow ? <CMSApp></CMSApp> : null}
+      {
+        canShow ? <CMSApp></CMSApp> : <div className="h-screen w-full flex items-center justify-center">You Need to login</div>
+      }
     </div>
   )
 }

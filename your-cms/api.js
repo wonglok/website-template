@@ -69,6 +69,121 @@ class SDKCore {
     this.ls.userID.value = null
     this.ls.username.value = null
   }
+  async getMe () {
+    return this.axios({
+      url: '/api/cms/user',
+      baseURL: this.getBaseURL(),
+      method: 'POST',
+      data: {
+        "action": "me",
+        "jwt": this.jwt
+      }
+    }).then(res => {
+      // this.ls.jwt.value = res.data.jwt
+      // this.ls.userID.value = res.data.user.userID
+      // this.ls.username.value = res.data.user.username
+
+      return res.data
+    }, (err) => {
+      let msg = err.response.data.msg || 'unable to get myself'
+      return Promise.reject(msg)
+    })
+  }
+
+  async adminChangePassword ({ _id, password }) {
+    return this.axios({
+      url: '/api/cms/user',
+      baseURL: this.getBaseURL(),
+      method: 'POST',
+      data: {
+        action: "admin-change-password",
+        data: {
+          _id,
+          password
+        },
+        jwt: this.jwt
+      }
+    }).then(res => {
+      // this.ls.jwt.value = res.data.jwt
+      // this.ls.userID.value = res.data.user.userID
+      // this.ls.username.value = res.data.user.username
+
+      return res.data
+    }, (err) => {
+      let msg = err.response.data.msg || 'unable to get myself'
+      return Promise.reject(msg)
+    })
+  }
+
+  async toggleIsAdmin ({ _id }) {
+    return this.axios({
+      url: '/api/cms/user',
+      baseURL: this.getBaseURL(),
+      method: 'POST',
+      data: {
+        action: "toggle-admin",
+        data: {
+          _id
+        },
+        jwt: this.jwt
+      }
+    }).then(res => {
+      // this.ls.jwt.value = res.data.jwt
+      // this.ls.userID.value = res.data.user.userID
+      // this.ls.username.value = res.data.user.username
+
+      return res.data
+    }, (err) => {
+      let msg = err.response.data.msg || 'unable to get myself'
+      return Promise.reject(msg)
+    })
+  }
+
+  async toggleCanLogin ({ _id }) {
+    return this.axios({
+      url: '/api/cms/user',
+      baseURL: this.getBaseURL(),
+      method: 'POST',
+      data: {
+        action: "toggle-can-login",
+        data: {
+          _id
+        },
+        jwt: this.jwt
+      }
+    }).then(res => {
+      // this.ls.jwt.value = res.data.jwt
+      // this.ls.userID.value = res.data.user.userID
+      // this.ls.username.value = res.data.user.username
+
+      return res.data
+    }, (err) => {
+      let msg = err.response.data.msg || 'unable to get myself'
+      return Promise.reject(msg)
+    })
+  }
+
+  async getUsers () {
+    return this.axios({
+      url: '/api/cms/user',
+      baseURL: this.getBaseURL(),
+      method: 'POST',
+      data: {
+        "action": "list-users",
+        "jwt": this.jwt
+      }
+    }).then(res => {
+      // this.ls.jwt.value = res.data.jwt
+      // this.ls.userID.value = res.data.user.userID
+      // this.ls.username.value = res.data.user.username
+
+      return res.data
+    }, (err) => {
+      let msg = err.response.data.msg || 'unable to get myself'
+      return Promise.reject(msg)
+    })
+  }
+
   async login ({ identity, password }) {
     return this.axios({
       url: '/api/cms/auth',
@@ -92,6 +207,29 @@ class SDKCore {
       return Promise.reject(msg)
     })
   }
+
+  async adminRegister ({ email, username, password }) {
+    return this.axios({
+      url: '/api/cms/user',
+      baseURL: this.getBaseURL(),
+      method: 'POST',
+      data: {
+        "action": "admin-register",
+        "data": {
+          "email": email,
+          "username": username,
+          "password": password
+        },
+        "jwt": this.jwt
+      }
+    }).then(res => {
+      return res.data
+    }, (err) => {
+      let msg = err.response.data.msg || 'unable to register'
+      return Promise.reject(msg)
+    })
+  }
+
   async register ({ email, username, password }) {
     return this.axios({
       url: '/api/cms/auth',

@@ -37,7 +37,7 @@ let getHash = (pwtext) => new Promise((resolve, reject) => {
     } else {
       resolve(hash)
     }
-  });
+  })
 })
 
 let compare = (pwtext, hash) => new Promise((resolve, reject) => {
@@ -90,11 +90,45 @@ let getUserByIdentity = async ({ identity }) => {
 
 module.exports.getUserByIdentity = getUserByIdentity
 
+//-------
 
 let listUsers = async () => {
-  return await mongodb.User.find({})
+  return await mongodb.User.find({}).select('-passwordHash')
 }
 module.exports.listUsers = listUsers
+
+//-------
+
+let toggleAdmin = async ({ _id }) => {
+  let user = await mongodb.User.findOne({ _id }).select('-passwordHash')
+  await mongodb.User.updateOne({ _id }, { isAdmin: !user.isAdmin })
+  let user2 = await mongodb.User.findOne({ _id }).select('-passwordHash')
+  return user2
+}
+module.exports.toggleAdmin = toggleAdmin
+
+//-------
+
+let toggleCanLogin = async ({ _id }) => {
+  let user = await mongodb.User.findOne({ _id }).select('-passwordHash')
+  await mongodb.User.updateOne({ _id }, { canLogin: !user.canLogin })
+  let user2 = await mongodb.User.findOne({ _id }).select('-passwordHash')
+  return user2
+}
+module.exports.toggleCanLogin = toggleCanLogin
+
+//-------
+
+let adminChangePassword = async ({ _id, password }) => {
+  let user = await mongodb.User.findOne({ _id }).select('-passwordHash')
+  let passwordHash = await getHash(password)
+  await mongodb.User.updateOne({ _id: user._id }, { passwordHash: passwordHash })
+  let user2 = await mongodb.User.findOne({ _id }).select('-passwordHash')
+  return user2
+}
+module.exports.adminChangePassword = adminChangePassword
+
+//-------
 
 module.exports.checkJWT = async ({ jwt }) => {
   let item = checkJWT({ jwt })
@@ -145,7 +179,8 @@ module.exports.register = async ({ username, password, email }) => {
     passwordHash,
     email,
     isAdmin,
-    roles: [{ role: 'guest' }]
+    canLogin: true,
+    roles: [{ role: 'user' }]
   })
   newUsr = await newUsr.save()
 

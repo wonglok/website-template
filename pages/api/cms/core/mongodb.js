@@ -19,6 +19,10 @@ SchemaExport.User = new Schema({
   email: String,
   passwordHash: String,
   displayName: String,
+  canLogin: {
+    type: Boolean,
+    default: true
+  },
   isAdmin: {
     type: Boolean,
     default: false
@@ -61,97 +65,6 @@ SchemaExport.Posts = new Schema({
 
 module.exports.Posts = mongoose.models.Posts || mongoose.model('Posts', SchemaExport.Posts);
 
-//-----------------------
-
-SchemaExport.Project = new Schema({
-  featured: {
-    type: Boolean,
-    default: false
-  },
-
-  userID: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-  },
-  displayName: String,
-  libs: [{
-    name: String,
-    url: String
-  }],
-  slug: {
-    type: String,
-    unique: true,
-    index: true
-  },
-}, {
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
-
-
-module.exports.Project = mongoose.models.Project || mongoose.model('Project', SchemaExport.Project);
-
-//-----------------------
-
-
-
-SchemaExport.SubCore = new Schema({
-  userID: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  projectID: {
-    type: Schema.Types.ObjectId,
-    ref: 'Project'
-  },
-  position: {
-    x: Number,
-    y: Number,
-    z: Number
-  },
-  rID: String,
-  color: String
-}, {
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
-
-module.exports.SubCore = mongoose.models.SubCore || mongoose.model('SubCore', SchemaExport.SubCore);
-
-//-----------------------
-
-
-SchemaExport.CodeBlock = new Schema({
-  userID: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  projectID: {
-    type: Schema.Types.ObjectId,
-    ref: 'Project'
-  },
-  position: {
-    x: Number,
-    y: Number,
-    z: Number
-  },
-  rID: String,
-  color: String,
-  code: String
-}, {
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
-
-module.exports.CodeBlock = mongoose.models.CodeBlock || mongoose.model('CodeBlock', SchemaExport.CodeBlock);
-
-//-----------------------
 
 module.exports.DocOperation = class DocOperation {
   constructor ({ req, res, DocClass, Auth }) {

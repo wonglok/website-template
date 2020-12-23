@@ -2,7 +2,7 @@ module.exports = async (req, res) => {
   let Auth = require('./core/auth.js')
   let MongoDB = require('./core/mongodb.js')
   let DocOperation = MongoDB.DocOperation
-  let DocClass = MongoDB.CodeBlock
+  let DocClass = MongoDB.Posts
 
   if (req.method === 'POST') {
     // res.json({
