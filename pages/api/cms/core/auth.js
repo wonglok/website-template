@@ -52,8 +52,7 @@ let compare = (pwtext, hash) => new Promise((resolve, reject) => {
 })
 
 let countHowManyUsers = module.exports.countHowManyUsers = async () => {
-  let result = await mongodb.User.countDocuments({})
-
+  let result = await mongodb.User.countDocuments()
   if (result) {
     return result
   } else {
@@ -90,6 +89,12 @@ let getUserByIdentity = async ({ identity }) => {
 }
 
 module.exports.getUserByIdentity = getUserByIdentity
+
+
+let listUsers = async () => {
+  return await mongodb.User.find({})
+}
+module.exports.listUsers = listUsers
 
 module.exports.checkJWT = async ({ jwt }) => {
   let item = checkJWT({ jwt })
@@ -129,13 +134,17 @@ module.exports.register = async ({ username, password, email }) => {
   // let compared = await compare(password, passwordHash)
 
   let howMany = await countHowManyUsers()
+  let isAdmin = false
+  if (!howMany || howMany === 0) {
+    isAdmin = true
+  }
 
   let newUsr = new mongodb.User({
     displayName: username,
     username,
     passwordHash,
     email,
-    isAdmin: howMany === 0,
+    isAdmin,
     roles: [{ role: 'guest' }]
   })
   newUsr = await newUsr.save()
