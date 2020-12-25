@@ -471,19 +471,27 @@ export const Pages = new EndPointSDK({ SDK, endpoint: `/api/cms/pages` })
 
 export const usePage = create((set, get) => {
   return {
+    selected: false,
     page: false,
     savePage: async ({ _id, data }) => {
       let res = await Pages.updateMine({
         doc: {
           _id,
-          data,
+          data
         }
       })
-      console.log('update', res)
+
+      set(() => {
+        return { page: res }
+      })
     },
     loadPage: async ({ _id }) => {
       let res = await Pages.findOneMine({ query: { _id } })
       set({ page: res })
+      return res
+    },
+    select: async ({ node }) => {
+      set({ select: node })
     }
   }
 })

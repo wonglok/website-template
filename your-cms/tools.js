@@ -36,5 +36,4 @@ export const getTools = () => {
     inlineCode: InlineCode,
     simpleImage: SimpleImage
   }
-
 }

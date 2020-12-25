@@ -1,9 +1,9 @@
-// components/user/Text.js
-import React from "react";
-import { useNode } from "@craftjs/core";
+import React from "react"
+import { useNode } from "@craftjs/core"
 
-let Compos = ({ text, className }) => {
-  const { connectors: {connect, drag} } = useNode();
+export const Text = ({ text, className }) => {
+  const { connectors: { connect, drag } } = useNode()
+
   return (
     <div className={`block m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-300 transition-colors duration-200 ${className}`} ref={ref => connect(drag(ref))}>
       {text}
@@ -11,7 +11,8 @@ let Compos = ({ text, className }) => {
   )
 }
 
-Compos.craft = {
+Text.craft = {
+  name: 'Text',
   rules: {
     canDrag: (node) => {
       return true
@@ -20,12 +21,10 @@ Compos.craft = {
       return true
     },
     canMoveIn: () => {
-      return true
+      return false
     },
     canMoveOut: () => {
       return true
     }
   }
 }
-
-export const Text = Compos

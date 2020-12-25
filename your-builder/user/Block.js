@@ -1,32 +1,30 @@
-// components/user/Text.js
 import React from "react";
 import { useNode } from "@craftjs/core";
 
-let Compos = ({ children, className }) => {
+export const Block = ({ children, className }) => {
   const { connectors: {connect, drag} } = useNode();
   return (
-    <div className={`block m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl ${className}`} ref={ref => connect(drag(ref))}>
+    <div className={`m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl flex justify-around ${className}`} ref={ref => connect(drag(ref))}>
       {children}
     </div>
   )
 }
 
-Compos.craft = {
+Block.craft = {
   name: 'Block',
   rules: {
-    canDrag: () => {
+    canDrag: (node) => {
       return true
     },
-    canDrop: () => {
+    canDrop: (node) => {
       return true
     },
-    canMoveIn: () => {
-      return true
+    canMoveIn: (income) => {
+      let name = income.data.type.craft.name
+      return ['Text'].includes(name)
     },
     canMoveOut: () => {
       return true
     }
   }
 }
-
-export const Block = Compos

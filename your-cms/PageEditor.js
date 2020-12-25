@@ -2,30 +2,47 @@
 // import { getTools } from './tools'
 import { useRef, useEffect, useState } from 'react'
 import React from "react";
-import {Editor, Frame, Element, useEditor} from "@craftjs/core"
-import * as RE from '../your-builder/user'
-import { usePage } from './api';
+import { Editor, Frame, Element, useEditor, useNode } from "@craftjs/core"
+import { Pages, usePage } from './api';
 import { useRouter } from 'next/router';
+import * as RE from '../your-builder/user'
 
-export const ToolTemplate = ({ children = <Element is={RE.Block} canvas></Element>, title = 'Template' }) => {
+export const ToolTemplate = ({ children = <Element is={RE.Text} canvas></Element>, title = 'Template' }) => {
   // const { connectors, query } = useEditor()
   const { connectors } = useEditor()
   return <div
   ref={(ref) => {
     connectors.create(ref, children)
   }}
-  className={'p-2 m-3 border border-gray-800 inline-block'}>{title}</div>
+  className={'p-2 m-3 border border-gray-800 inline-block'}>
+    {title}
+  </div>
 }
 
-export const EditorHeader = ({ onSave }) => {
+const DeleteBtn = () => {
+  const { query } = useEditor()
+  const { selectedNodeId, actions } = useEditor((state) => ({
+    selectedNodeId: state.events.selected
+  }));
+  useEffect(() => {
+    if (selectedNodeId) {
+      const node = query.node(selectedNodeId)
+      const instance = node.get()
+      instance.dom.classList.add('border-blue-500')
+      instance.dom.classList.add('rounded-2xl')
 
-  let save = async () => {
-    let str = query.serialize()
-    console.log(str)
-  }
+      return () => {
+        instance.dom.classList.remove('border-blue-500')
+        instance.dom.classList.remove('rounded-2xl')
+      }
+    }
+  }, [selectedNodeId])
 
-  return <>
-  </>
+  return selectedNodeId && (
+    <div>
+      <a onClick={() => actions.delete(selectedNodeId)}>Delete</a>
+    </div>
+  )
 }
 
 export const ToolBox = ({ page }) => {
@@ -36,16 +53,17 @@ export const ToolBox = ({ page }) => {
     let str = query.serialize()
     savePage({ _id: router.query.id, data: str })
   }
+
   return (
     <div>
       <div className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
         Page: {page && page.displayName}
       </div>
-      <div className={'px-3 py-2 m-3 border border-blue-500 rounded-lg inline-block'} onClick={onSave}>Save</div>
-      <div className="">
-        <ToolTemplate title="Block">
-          <Element canvas is={RE.Block}></Element>
-        </ToolTemplate>
+      <div className={''}>
+        <div className={'px-3 py-2 m-3 border border-blue-500 rounded-lg inline-block'} onClick={onSave}>Save</div>
+        <DeleteBtn></DeleteBtn>
+      </div>
+      <div className={''}>
         <ToolTemplate title="Flex Around">
           <Element canvas is={RE.FlexAround}>
             <Element is={RE.Text} text="Text Box Here"></Element>
@@ -57,14 +75,13 @@ export const ToolBox = ({ page }) => {
         </ToolTemplate>
       </div>
     </div>
-
   )
 }
 
 export const PageEditor = () => {
   let router = useRouter()
   let page = usePage(state => state.page)
-  let pageData = usePage(state => state.page && state.page.data)
+  let pageData = usePage(state => state.page.data)
   let loadPage = usePage(state => state.loadPage)
 
   useEffect(() => {
@@ -73,14 +90,12 @@ export const PageEditor = () => {
 
   return (
     <div>
-      <Editor enabled={true} resolver={RE}>
-        <EditorHeader></EditorHeader>
+      {page && <Editor resolver={{ ...RE }}>
         <ToolBox page={page}></ToolBox>
         <Frame data={pageData}>
-          <Element is={RE.Page} className={'bg-white'} canvas>
-          </Element>
+          <Element is={RE.Page} canvas></Element>
         </Frame>
-      </Editor>
+      </Editor>}
     </div>
   )
 }

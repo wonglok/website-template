@@ -1,17 +1,17 @@
-// components/user/Text.js
-import React from "react";
-import { useNode } from "@craftjs/core";
+import React from "react"
+import { useNode } from "@craftjs/core"
 
-let Compos = ({ children, className }) => {
+export const Page = ({ children, className }) => {
   const { connectors: {connect, drag} } = useNode();
   return (
-    <div className={`block m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-black transition-colors duration-200 ${className}`} ref={ref => connect(drag(ref))}>
+    <div className={`block m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-black transition-colors shadow-xl duration-200 ${className}`} ref={ref => connect(drag(ref))}>
       {children}
+      <div className={'h-32'}></div>
     </div>
   )
 }
 
-Compos.craft = {
+Page.craft = {
   name: 'Page',
   rules: {
     canDrag: (node) => {
@@ -22,12 +22,10 @@ Compos.craft = {
     },
     canMoveIn: (income) => {
       let name = income.data.type.craft.name
-      return ['Block'].includes(name)
+      return ['Block', 'FlexAround'].includes(name)
     },
     canMoveOut: () => {
       return true
     }
   }
 }
-
-export const Page = Compos
