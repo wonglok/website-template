@@ -4,9 +4,10 @@ import { useRef, useEffect, useState } from 'react'
 import React from "react";
 import {Editor, Frame, Element, useEditor} from "@craftjs/core"
 import * as RE from '../your-builder/user'
-import { compress, decompress } from 'shrink-string'
+import { usePage } from './api';
+import { useRouter } from 'next/router';
 
-export const ToolTemplate = ({ children = <Element is={RE.Box} canvas></Element>, title = 'Template' }) => {
+export const ToolTemplate = ({ children = <Element is={RE.Block} canvas></Element>, title = 'Template' }) => {
   // const { connectors, query } = useEditor()
   const { connectors } = useEditor()
   return <div
@@ -16,27 +17,37 @@ export const ToolTemplate = ({ children = <Element is={RE.Box} canvas></Element>
   className={'p-2 m-3 border border-gray-800 inline-block'}>{title}</div>
 }
 
-export const SaveAndLoad = ({ onSave }) => {
-  const { query } = useEditor()
+export const EditorHeader = ({ onSave }) => {
+
   let save = async () => {
-    const str = await compress(query.serialize());
-    onSave(str)
+    let str = query.serialize()
+    console.log(str)
   }
 
   return <>
-    <div className={'px-3 py-2 m-3 border border-blue-500 rounded-lg inline-block'} onClick={save}>Save</div>
   </>
 }
 
-export const ToolBox = () => {
+export const ToolBox = ({ page }) => {
+  const { query } = useEditor()
+  const router = useRouter()
+  const savePage = usePage(state => state.savePage)
+  const onSave = () => {
+    let str = query.serialize()
+    savePage({ _id: router.query.id, data: str })
+  }
   return (
     <div>
+      <div className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
+        Page: {page && page.displayName}
+      </div>
+      <div className={'px-3 py-2 m-3 border border-blue-500 rounded-lg inline-block'} onClick={onSave}>Save</div>
       <div className="">
-        <ToolTemplate title="Section">
-          <Element canvas is={RE.Box}></Element>
+        <ToolTemplate title="Block">
+          <Element canvas is={RE.Block}></Element>
         </ToolTemplate>
-        <ToolTemplate title="Box Flex">
-          <Element canvas is={RE.Box} className="flex flex-wrap">
+        <ToolTemplate title="Flex Around">
+          <Element canvas is={RE.FlexAround}>
             <Element is={RE.Text} text="Text Box Here"></Element>
             <Element is={RE.Text} text="Text Box Here"></Element>
           </Element>
@@ -45,31 +56,27 @@ export const ToolBox = () => {
           <Element is={RE.Text} text="Text Box Here"></Element>
         </ToolTemplate>
       </div>
-      <div className="">
-
-      </div>
     </div>
 
   )
 }
 
-export const PageEditor = ({ onLoadHook, onSave }) => {
-  let [data, setData] = useState(null)
+export const PageEditor = () => {
+  let router = useRouter()
+  let page = usePage(state => state.page)
+  let pageData = usePage(state => state.page && state.page.data)
+  let loadPage = usePage(state => state.loadPage)
 
-  onLoadHook(async (page) => {
-    console.log(page)
-    if (page && page.data) {
-      let str = await decompress(page.data)
-      setData(str)
-    }
-  })
+  useEffect(() => {
+    loadPage({ _id: router.query.id })
+  }, [router.query.id])
 
   return (
     <div>
       <Editor enabled={true} resolver={RE}>
-        <SaveAndLoad onSave={onSave}></SaveAndLoad>
-        <ToolBox></ToolBox>
-        <Frame data={data}>
+        <EditorHeader></EditorHeader>
+        <ToolBox page={page}></ToolBox>
+        <Frame data={pageData}>
           <Element is={RE.Page} className={'bg-white'} canvas>
           </Element>
         </Frame>

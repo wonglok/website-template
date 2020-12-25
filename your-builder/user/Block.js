@@ -12,11 +12,12 @@ let Compos = ({ children, className }) => {
 }
 
 Compos.craft = {
+  name: 'Block',
   rules: {
-    canDrag: (node) => {
+    canDrag: () => {
       return true
     },
-    canDrop: (node) => {
+    canDrop: () => {
       return true
     },
     canMoveIn: () => {
@@ -28,4 +29,4 @@ Compos.craft = {
   }
 }
 
-export const Box = Compos
+export const Block = Compos

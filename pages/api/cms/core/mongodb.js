@@ -159,6 +159,16 @@ module.exports.DocOperation = class DocOperation {
     })
   }
 
+  async findOneMine () {
+    this.tryRun(async () => {
+      let { userID } = await this.getInfoFromJWT()
+
+      let query = this.req.body.data.query
+      let result = await this.DocClass.findOne({ ...query, userID })
+      this.res.status(200).json(result)
+    })
+  }
+
   async filterMine () {
     this.tryRun(async () => {
       let { userID } = await this.getInfoFromJWT()

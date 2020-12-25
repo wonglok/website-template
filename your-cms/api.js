@@ -1,5 +1,6 @@
 import axios from 'axios'
-
+import create from 'zustand'
+import { compress, decompress } from 'shrink-string'
 
 class LSStorage {
   constructor ({ AppName = 'EnjoyCreationStack', TypeName = 'JWT', onRemove = () => {} }) {
@@ -313,6 +314,26 @@ class DocOperation {
     })
   }
 
+  async findOneMine ({ query }) {
+    let action = `find-one-mine`
+    return this.axios({
+      url: `${this.endpoint}?action=${action}`,
+      baseURL: this.baseURL,
+      method: 'POST',
+      data: {
+        jwt: this.jwt,
+        "data": {
+          query: query
+        }
+      }
+    }).then(res => {
+      return res.data
+    }, (err) => {
+      let msg = err.response.data.msg || `unable to ${action}`
+      return Promise.reject(msg)
+    })
+  }
+
   async filterMine ({ filter }) {
     let action = `filter-mine`
     return this.axios({
@@ -447,6 +468,25 @@ export const SDK = new SDKCore({ axios })
 // export const CodeBlock = new EndPointSDK({ SDK, endpoint: `/api/cms/codeblock` })
 
 export const Pages = new EndPointSDK({ SDK, endpoint: `/api/cms/pages` })
+
+export const usePage = create((set, get) => {
+  return {
+    page: false,
+    savePage: async ({ _id, data }) => {
+      let res = await Pages.updateMine({
+        doc: {
+          _id,
+          data,
+        }
+      })
+      console.log('update', res)
+    },
+    loadPage: async ({ _id }) => {
+      let res = await Pages.findOneMine({ query: { _id } })
+      set({ page: res })
+    }
+  }
+})
 
 // export const runTestProject = async () => {
 //   if (process.env.NODE_ENV === 'development') {

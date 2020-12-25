@@ -5,24 +5,23 @@ import { useNode } from "@craftjs/core";
 let Compos = ({ children, className }) => {
   const { connectors: {connect, drag} } = useNode();
   return (
-    <div className={`block m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-black transition-colors duration-200 ${className}`} ref={ref => connect(drag(ref))}>
+    <div className={`m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl flex justify-around ${className}`} ref={ref => connect(drag(ref))}>
       {children}
     </div>
   )
 }
 
 Compos.craft = {
-  name: 'Page',
+  name: 'FlexAround',
   rules: {
-    canDrag: (node) => {
+    canDrag: () => {
       return true
     },
-    canDrop: (node) => {
+    canDrop: () => {
       return true
     },
-    canMoveIn: (income) => {
-      let name = income.data.type.craft.name
-      return ['Block'].includes(name)
+    canMoveIn: () => {
+      return true
     },
     canMoveOut: () => {
       return true
@@ -30,4 +29,4 @@ Compos.craft = {
   }
 }
 
-export const Page = Compos
+export const FlexAround = Compos
