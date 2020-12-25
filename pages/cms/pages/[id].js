@@ -7,7 +7,6 @@ import Head from 'next/head'
 
 export function PageEditorData () {
   const router = useRouter()
-  const editorRef = useRef()
   const [page, setPage] = useState(false)
   const [changed, setChanged] = useState(false)
 
@@ -15,19 +14,24 @@ export function PageEditorData () {
     let pages = await Pages.filterMine({ filter: { _id: router.query.id } })
     pages = pages || []
     pages = pages.filter(e => e._id === router.query.id)
-    setPage(pages[0])
+
+    // const str = await compress(str)
+
+    if (pages[0]) {
+      setPage(pages[0])
+    }
   }, [router.query.id, page && page._id])
 
-  let onSave = () => {
-    if (editorRef.current) {
-      editorRef.current.save()
-        .then(async (data) => {
-          let cloned = JSON.parse(JSON.stringify(page))
-          cloned.data = data
-          await Pages.updateMine({ doc: cloned })
-          setChanged(false)
-        })
-    }
+  let onSave = async (data) => {
+    let cloned = JSON.parse(JSON.stringify(page))
+    cloned.data = data
+    await Pages.updateMine({ doc: cloned })
+    console.log(cloned.data)
+    setChanged(false)
+  }
+
+  let onLoadHook = (hook) => {
+    hook(page)
   }
 
   let onExit = () => {
@@ -50,11 +54,10 @@ export function PageEditorData () {
 
     <div className={'mb-6'}>
       <div onClick={() => { onExit() }} className=" inline-block px-4 py-2 text-sm bg-white rounded-lg cursor-pointer mr-3">Back</div>
-      <div onClick={onSave} className=" inline-block px-4 py-2 text-sm bg-green-600 text-white rounded-lg cursor-pointer">Save</div>
     </div>
 
     <Suspense fallback={null}>
-      <PageEditor onChange={onChange} onSave={onSave} onReady={v => editorRef.current = v} page={page}></PageEditor>
+      <PageEditor onChange={onChange} onLoadHook={onLoadHook} onSave={onSave}></PageEditor>
     </Suspense>
   </div>) || <div>Not Found</div>
 }

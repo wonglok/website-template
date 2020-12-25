@@ -11,7 +11,12 @@ let Compos = ({ children, className }) => {
   )
 }
 
+let ButtonSettings = () => {
+  return <div>123</div>
+}
+
 Compos.craft = {
+  related: ButtonSettings,
   rules: {
     canDrag: (node) => {
       return true
@@ -19,7 +24,8 @@ Compos.craft = {
     canDrop: (node) => {
       return true
     },
-    canMoveIn: () => {
+    canMoveIn: (income) => {
+      let item = income.data.type.craft
       return true
     },
     canMoveOut: () => {
