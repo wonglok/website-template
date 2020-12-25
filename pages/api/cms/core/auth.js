@@ -200,10 +200,13 @@ module.exports.register = async ({ username, password, email }) => {
 module.exports.login = async ({ identity, password }) => {
   // let data = await arc.tables()
   // let hash = await getHash(password)
-
   let user = await getUserByIdentity({ identity })
 
   // console.log(user)
+
+  if (!user.canLogin) {
+    return Promise.reject('account disabled')
+  }
 
   if (user && user.passwordHash) {
     let correct = await compare(password, user.passwordHash)

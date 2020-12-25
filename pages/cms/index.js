@@ -8,12 +8,12 @@ export function CMSApp () {
   const router = useRouter()
   return (
     <div>
-      <CMSLayout cta={'Jump To Posts'} onClickCTA={() => { router.push('/cms/posts') }}>
+      <CMSLayout>
         <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
           Welcome to CMS
         </h2>
         <div>
-          123
+          Hi!
         </div>
       </CMSLayout>
     </div>
@@ -43,7 +43,7 @@ export default function CMSLandingPage () {
       </Head>
 
       {
-        canShow ? <CMSApp></CMSApp> : <div className="h-screen w-full flex items-center justify-center">You Need to login</div>
+        canShow ? <CMSApp></CMSApp> : <div className="h-screen w-full flex items-center justify-center">Checking Login</div>
       }
     </div>
   )

@@ -83,9 +83,11 @@ export function CMSLayout ({ children, onClickCTA = () => {}, cta }) {
         </div>
 
         <button
-          onClick={(onClickCTA)}
+          onClick={() => {
+            router.push('/')
+          }}
           className={"mt-8 flex items-center justify-center py-3 px-4 text-white dark:text-gray-200 bg-green-400 dark:bg-green-500 rounded-lg shadow"}>
-          <span>{cta || 'Welcome!'}</span>
+          <span>{'View as Public'}</span>
         </button>
 
         <ul className="mt-2 text-gray-600">
@@ -109,7 +111,7 @@ export function CMSLayout ({ children, onClickCTA = () => {}, cta }) {
             </li>
           </MyLink>
 
-          <MyLink href="/cms/posts">
+          <MyLink href="/cms/pages">
             <li
               className="mt-4">
               <span href="#home" className="flex pl-4">
@@ -122,7 +124,7 @@ export function CMSLayout ({ children, onClickCTA = () => {}, cta }) {
                     4h4v-4h-4M4 8h4V4H4v4z"></path>
                 </svg>
 
-                <span className="ml-2 capitalize font-medium">Posts</span>
+                <span className="ml-2 capitalize font-medium">Pages</span>
               </span>
             </li>
           </MyLink>

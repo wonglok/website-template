@@ -4,26 +4,7 @@ import { useRouter } from 'next/router'
 import { SDK } from '../../your-cms/api'
 import { CMSLayout } from '../../your-cms/CMSLayout'
 import { Modal } from '../../your-cms/Modal'
-import EventEmitter from 'events'
-
-function getUsers () {
-  let [rows, setRows] = useState([])
-
-  useEffect(async () => {
-    let users = await SDK.getUsers()
-    setRows(users)
-    let onReload = async () => {
-      let users = await SDK.getUsers()
-      setRows(users)
-    }
-    window.addEventListener('reload-user-list', onReload)
-    return () => {
-      window.removeEventListener('reload-user-list', onReload)
-    }
-  }, [])
-
-  return [rows]
-}
+import useSWR from 'swr'
 
 let HeaderRow = () => {
   return <tr>
@@ -116,8 +97,10 @@ function ToggleCanLogin ({ row }) {
     setCanLogin(!canLogin)
     await SDK.toggleCanLogin({ _id: row._id })
   }
+
   return canShow ? <div onClick={toggleCanLogin} className={canShow ? 'block' : 'hidden'}>
-    {canLogin ? <span
+    {
+    canLogin ? <span
       className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
       <span aria-hidden
           className="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
@@ -128,7 +111,7 @@ function ToggleCanLogin ({ row }) {
       className="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
       <span aria-hidden
           className="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
-      <span className="relative">Deactived</span>
+      <span className="relative">Disabled</span>
     </span>
     }
   </div> :
@@ -193,13 +176,13 @@ function UserInfoRow ({ row }) {
       </td>
 
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-          <PasswordUpdater row={row}></PasswordUpdater>
+        <PasswordUpdater row={row}></PasswordUpdater>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-          <ToggleIsAdmin row={row}></ToggleIsAdmin>
+        <ToggleIsAdmin row={row}></ToggleIsAdmin>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-          <ToggleCanLogin row={row}></ToggleCanLogin>
+        <ToggleCanLogin row={row}></ToggleCanLogin>
       </td>
   </tr>
 }
@@ -211,7 +194,8 @@ function UserInfoRows ({ rows }) {
 }
 
 function UserTable () {
-  let [rows] = getUsers()
+  let users = useSWR('getUsers', key => SDK[key]({  }))
+  let rows = users.data || []
 
   return (
     <div className="antialiased font-sans">
@@ -302,7 +286,7 @@ function UserTable () {
 
 export function AdminArea ({ children }) {
   const [canShow, setCanShow] = useState('wait')
-  useEffect(async () => {
+  useMemo(async () => {
     try {
       let me = await SDK.getMe()
       if (me && me.isAdmin) {
@@ -314,9 +298,10 @@ export function AdminArea ({ children }) {
       setCanShow('no')
       console.log(e)
     }
+
     return () => {
     }
-  })
+  }, [])
 
   let result = () => {
     if (canShow === 'wait') {
@@ -335,7 +320,7 @@ export function CMSApp () {
   // UserCreator
   return (
     <div>
-      <CMSLayout cta={'Create a User'} onClickCTA={() => {}}>
+      <CMSLayout>
         <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
           Users
         </h2>
@@ -372,7 +357,7 @@ export default function CMSLandingPage () {
         <link rel="icon" href="/fav/favicon.ico" />
       </Head>
       {
-        canShow ? <CMSApp></CMSApp> : <div className="h-screen w-full flex items-center justify-center">You Need to login</div>
+        canShow ? <CMSApp></CMSApp> : <div className="h-screen w-full flex items-center justify-center">Checking Login</div>
       }
     </div>
   )

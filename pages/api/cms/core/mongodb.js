@@ -37,25 +37,55 @@ SchemaExport.User = new Schema({
 
 module.exports.User = mongoose.models.User || mongoose.model('User', SchemaExport.User);
 
+// //-----------------------
+
+// SchemaExport.Posts = new Schema({
+//   featured: {
+//     type: Boolean,
+//     default: false
+//   },
+
+//   userID: {
+//     type: Schema.Types.ObjectId,
+//     ref: 'User',
+//   },
+//   displayName: String,
+//   title: String,
+//   text: String,
+//   slug: {
+//     type: String,
+//     unique: true,
+//     index: true
+//   },
+// }, {
+//   timestamps: {
+//     createdAt: 'created_at',
+//     updatedAt: 'updated_at'
+//   }
+// })
+
+// module.exports.Posts = mongoose.models.Posts || mongoose.model('Posts', SchemaExport.Posts);
+
 //-----------------------
 
-SchemaExport.Posts = new Schema({
-  featured: {
-    type: Boolean,
-    default: false
-  },
-
+SchemaExport.Pages = new Schema({
   userID: {
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  title: String,
-  text: String,
+  type: {
+    type: String,
+    default: 'Page',
+  },
+
+  // Page, Profile
+  displayName: String,
   slug: {
     type: String,
     unique: true,
     index: true
   },
+  data: {}
 }, {
   timestamps: {
     createdAt: 'created_at',
@@ -63,8 +93,9 @@ SchemaExport.Posts = new Schema({
   }
 })
 
-module.exports.Posts = mongoose.models.Posts || mongoose.model('Posts', SchemaExport.Posts);
+module.exports.Pages = mongoose.models.Pages || mongoose.model('Pages', SchemaExport.Pages);
 
+//---------
 
 module.exports.DocOperation = class DocOperation {
   constructor ({ req, res, DocClass, Auth }) {
