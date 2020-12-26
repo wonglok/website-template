@@ -114,20 +114,20 @@ export const HTML = ({ isProductionMode = false, html, className }) => {
 
   return (
     <div className={`${devClass} ${className}`} ref={ref => connect(drag(ref))}>
-      <div ref={divRef}>
-      </div>
+      <div ref={divRef}></div>
     </div>
   )
 }
 
 const HTMLSettings = () => {
-  const { actions: { setProp }, fontSize } = useNode((node) => ({
-    fontSize: node.data.props.fontSize
+  const { actions: { setProp }, html } = useNode((node) => ({
+    html: node.data.props.html
   }));
 
   return (
     <>
       <Ace
+      value={html}
       onSave={({ code }) => {
         setProp(props => {
           props.html = code
