@@ -472,6 +472,15 @@ export const usePage = create((set, get) => {
   return {
     selected: false,
     page: false,
+    savePageName: async ({ _id, displayName }) => {
+      let res = await Pages.updateMine({
+        doc: {
+          _id,
+          displayName
+        }
+      })
+      set({ page: res })
+    },
     savePage: async ({ _id, data }) => {
       let res = await Pages.updateMine({
         doc: {

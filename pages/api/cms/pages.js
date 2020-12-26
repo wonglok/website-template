@@ -15,6 +15,8 @@ module.exports = async (req, res) => {
       await operation.create()
     } else if (req.query.action === 'list-mine') {
       await operation.listMine()
+    } else if (req.query.action === 'find-one-public') {
+      await operation.findOnePublic()
     } else if (req.query.action === 'find-one-mine') {
       await operation.findOneMine()
     } else if (req.query.action === 'filter-mine') {

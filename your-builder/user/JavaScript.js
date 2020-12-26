@@ -5,30 +5,18 @@ import { usePage } from "../../your-cms/api"
 // import ContentEditable from 'react-contenteditable'
 // import sanitizeHtml from 'sanitize-html'
 
-const Iframe = ({ content }) => {
+const ExecutionBox = ({ content }) => {
   const iRef = useRef()
 
   useEffect(() => {
     if (iRef.current) {
-      let frame = iRef.current
-
-      var element = window.document.createElement('html');
-      element.innerHTML = content;
-
-      iRef.current.appendChild(element)
-
-      // let doc = frame.contentDocument
-      // doc.open()
-      // doc.write(content)
-      // doc.close()
-
-      frame.style.width = '100%'
-      frame.style.height = `100%`
+      try {
+        eval(content)
+      } catch (e) {
+        console.log(e)
+      }
     }
     return () => {
-      if (iRef.current) {
-        iRef.current.innerHTML = ''
-      }
     }
   }, [content])
 
@@ -40,12 +28,14 @@ const Iframe = ({ content }) => {
 export const Ace = ({ value = '', onSave = () => {}, onChange = () => {} }) => {
   let ref = useRef()
   useEffect(() => {
-    var ace = require('brace');
-    // require('brace/mode/javascript');
-    // require('brace/mode/glsl');
-    require('brace/mode/html');
-    require('brace/theme/monokai');
-    require('brace/ext/searchbox');
+    var ace = require('brace')
+
+    // require('brace/mode/javascript')
+    // require('brace/mode/glsl')
+
+    require('brace/mode/javascript')
+    require('brace/theme/monokai')
+    require('brace/ext/searchbox')
 
     var editor = ace.edit(ref.current);
     editor.setTheme('ace/theme/monokai');
@@ -83,7 +73,7 @@ export const Ace = ({ value = '', onSave = () => {}, onChange = () => {} }) => {
       var session = editor.getSession()
       session.setUseWrapMode(false)
       session.setUseWorker(false)
-      session.setMode('ace/mode/html')
+      session.setMode('ace/mode/javascript')
       session.setOptions({ tabSize: 2, useSoftTabs: true })
 
       var commands = [
@@ -121,7 +111,7 @@ export const Ace = ({ value = '', onSave = () => {}, onChange = () => {} }) => {
   return <div style={{ width: '100%', height: '500px' }} ref={ref}></div>
 }
 
-export const HTML = ({ isProductionMode = false, html, className }) => {
+export const JavaScript = ({ isProductionMode = false, html, className }) => {
   const divRef = useRef()
   const { connectors: { connect, drag }, actions: { setProp }  } = useNode()
   const { selected, dragged } = useNode((state) => ({
@@ -132,7 +122,7 @@ export const HTML = ({ isProductionMode = false, html, className }) => {
   const [editable, setEditable] = useState(false);
 
   // useEffect(() => {
-  //   divRef.current.innerHTML = html
+  //   divRef.current.innerJavaScript = html
   //   console.log(divRef.current)
   // }, [html, editable])
 
@@ -148,12 +138,13 @@ export const HTML = ({ isProductionMode = false, html, className }) => {
 
   return (
     <div className={`${devClass} ${className}`} ref={ref => connect(drag(ref))}>
-      {html && <Iframe content={html}></Iframe> }
+      JavaScript Block...
+      {html && <ExecutionBox content={html}></ExecutionBox> }
     </div>
   )
 }
 
-const HTMLSettings = () => {
+const JavaScriptSettings = () => {
   const { actions: { setProp }, html, className } = useNode((node) => ({
     html: node.data.props.html,
     className: node.data.props.className
@@ -169,34 +160,36 @@ const HTMLSettings = () => {
 
   return (
     <>
+      {/* Apple */}
       <input value={className} onInput={e => setProp(props => {
         props.className = e.target.value
       })}></input>
+
       <Ace
-      value={html}
-      onSave={({ code }) => {
-        setProp(props => {
-          props.html = code
-          console.log(code)
-          goSave()
-        })
-      }}
+        value={html}
+        onSave={({ code }) => {
+          setProp(props => {
+            props.html = code
+            console.log(code)
+            goSave()
+          })
+        }}
       ></Ace>
     </>
   )
 }
 
-HTML.craft = {
-  name: 'HTML',
+JavaScript.craft = {
+  name: 'JavaScript',
   props: {
     className: 'h-64 w-64',
-    html: `funfun html`,
+    html: `console.log('testing code')`,
     textAlign: 'left',
     fontSize: 17,
     text: 'some text'
   },
   related: {
-    settings: HTMLSettings
+    settings: JavaScriptSettings
   },
   rules: {
     canDrag: (node) => {

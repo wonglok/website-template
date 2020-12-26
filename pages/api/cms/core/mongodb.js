@@ -159,6 +159,14 @@ module.exports.DocOperation = class DocOperation {
     })
   }
 
+  async findOnePublic () {
+    this.tryRun(async () => {
+      let query = this.req.body.data.query
+      let result = await this.DocClass.findOne({ ...query })
+      this.res.status(200).json(result)
+    })
+  }
+
   async findOneMine () {
     this.tryRun(async () => {
       let { userID } = await this.getInfoFromJWT()
@@ -218,7 +226,9 @@ module.exports.DocOperation = class DocOperation {
     if (user.username !== username) {
       throw new Error('not owner')
     }
-    console.log('owner-check', user)
+    let cloned = JSON.parse(JSON.stringify(user))
+    delete cloned.passwordHash
+    console.log('owner-check', cloned)
     return user
   }
 
