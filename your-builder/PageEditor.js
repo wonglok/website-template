@@ -44,23 +44,23 @@ const SaveBtn = () => {
 }
 
 export const SettingsPanel = () => {
-  const { selected } = useEditor((state) => {
+  const { selected } = useEditor((state, query) => {
     const currentNodeId = state.events.selected;
     let selected;
 
-    if ( currentNodeId ) {
+    if (currentNodeId) {
       selected = {
         id: currentNodeId,
         name: state.nodes[currentNodeId].data.name,
         settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings
       };
+      // query.node(currentNodeId)
     }
 
     return {
       selected
     }
   });
-
 
   return <div>
     <div>
@@ -90,6 +90,11 @@ export const EditorBody = ({ children, page }) => {
           </div>
 
           <div>
+
+            <ToolTemplate title="HTML">
+              <Element is={RE.HTML}>
+              </Element>
+            </ToolTemplate>
             <ToolTemplate title="Flex Box">
               <Element canvas is={RE.FlexBox}>
               </Element>

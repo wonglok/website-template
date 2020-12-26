@@ -12,7 +12,6 @@ export const FlexBox = ({ children, className }) => {
 
 FlexBox.craft = {
   name: 'FlexBox',
-
   rules: {
     canDrag: (node) => {
       return true
@@ -22,7 +21,7 @@ FlexBox.craft = {
     },
     canMoveIn: (income) => {
       let name = income.data.type.craft.name
-      return ['Text'].includes(name)
+      return ['Text', 'HTML'].includes(name)
     },
     canMoveOut: () => {
       return true
