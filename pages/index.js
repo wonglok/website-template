@@ -17,6 +17,10 @@ export async function getServerSideProps (context) {
   let action = 'find-one-public'
   let baseURL = `http://localhost:3000`
 
+  if (process.env.NODE_ENV === 'production') {
+    baseURL = `https://86deck.withloklok.com`
+  }
+
   let page = await axios({
     url: `${endpoint}?action=${action}`,
     baseURL: baseURL,
