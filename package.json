@@ -48,6 +48,7 @@
     "react-dom": "17.0.1",
     "react-editor-js": "^1.7.0",
     "react-monaco-editor": "^0.41.2",
+    "react-stickynode": "^3.0.4",
     "react-three-fiber": "^5.3.10",
     "react-use-gesture": "^9.0.0-beta.11",
     "sanitize-html": "^2.3.0",

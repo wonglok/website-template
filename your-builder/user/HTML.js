@@ -35,10 +35,14 @@ const Division = ({ content }) => {
   );
 };
 
+
+
 export const HTML = ({ content, className }) => {
   return (
     <DevWrap>
-      {content && <Division className={className} content={content}></Division> }
+      <div className={className}>
+        {content && <Division className={className} content={content}></Division> }
+      </div>
     </DevWrap>
   )
 }

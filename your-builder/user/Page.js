@@ -12,10 +12,11 @@ export const Page = ({ children }) => {
 
   const { connectors: { connect, drag } } = useNode();
   return (
-    <div className={'border border-black'}>
+    <DevWrap devMargin={false}>
+      {/* {editable && <div className={'h-3'}></div>} */}
       {children}
-      {editable && <div className={'h-24'}></div>}
-    </div>
+      {/* {editable && <div className={'h-3'}></div>} */}
+    </DevWrap>
   )
 }
 
@@ -30,6 +31,7 @@ Page.craft = {
     },
     canMoveIn: (income) => {
       let name = income.data.type.craft.name
+      console.log(name)
       return LayoutBlocks.includes(name)
     },
     canMoveOut: () => {

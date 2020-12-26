@@ -115,7 +115,7 @@ export const ClassNameEditor = () => {
     savePage({ _id: router.query.id, data: str })
   }
 
-  return <textarea onKeyDown={(e) => { if ((e.ctrlKey || e.metaKey) && (e.keyCode === 84 || e.key === 's')) { e.preventDefault(); e.stopPropagation(); goSave() } }} className={'w-full h-full mb-0 bg-gray-800 text-white'} value={className} onInput={e => setProp(props => {
+  return <textarea placeholder={'class name of this element'} onKeyDown={(e) => { if ((e.ctrlKey || e.metaKey) && (e.keyCode === 84 || e.key === 's')) { e.preventDefault(); e.stopPropagation(); goSave() } }} className={'w-full h-full mb-0 bg-gray-800 text-white p-2'} value={className} onInput={e => setProp(props => {
     props.className = e.target.value
   })}></textarea>
 }

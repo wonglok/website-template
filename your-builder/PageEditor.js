@@ -6,6 +6,8 @@ import { Editor, Frame, Element, useEditor, useNode } from "@craftjs/core"
 import { Pages, usePage } from '../your-cms/api';
 import { useRouter } from 'next/router'
 import * as RE from '../your-builder/user'
+import Sticky from 'react-stickynode'
+import cx from 'classnames'
 
 export const ToolTemplate = ({ children = <Element is={RE.Text} canvas></Element>, title = 'Template' }) => {
   // const { connectors, query } = useEditor()
@@ -14,7 +16,7 @@ export const ToolTemplate = ({ children = <Element is={RE.Text} canvas></Element
     ref={(ref) => {
       connectors.create(ref, children)
     }}
-    className={'p-2 m-1  border border-gray-800 inline-block'}>
+    className={'p-2 m-1 bg-white border border-gray-800 inline-block'}>
     {title}
   </div>
 }
@@ -53,6 +55,23 @@ const SaveBtn = () => {
   return <div className={'p-2 m-1  border border-gray-800 inline-block'} onClick={onSave}>Save</div>
 }
 
+
+const HistoryBtn = () => {
+  const { canUndo, canRedo, actions } = useEditor((state, query) => ({
+    canUndo: query.history.canUndo(),
+    canRedo: query.history.canRedo()
+  }));
+
+  return <>
+      {
+        canUndo && <button className={'p-2 m-1  border border-gray-800 inline-block'} onClick={() => actions.history.undo()}>Undo</button>
+      }
+      {
+        canRedo && <button className={'p-2 m-1  border border-gray-800 inline-block'} onClick={() => actions.history.redo()}>Redo</button>
+      }
+  </>
+}
+
 export const SettingsPanel = () => {
   const { selected } = useEditor((state, query) => {
     const currentNodeId = state.events.selected;
@@ -72,13 +91,34 @@ export const SettingsPanel = () => {
   });
 
   return <div>
-
-    <div>
+    {selected && <div className={'text-gray-800 p-3 mx-1 text-center font-sans text-bold border border-gray-800'}>
+      {
+        selected && selected.name
+      }
+    </div>}
+    <div class={"mx-1"}>
       {
         selected && selected.settings && React.createElement(selected.settings)
       }
     </div>
   </div>
+}
+
+export const PreviewBtn = ({ onToggle }) => {
+  return <div className={'p-2 m-1  border border-gray-800 inline-block'} onClick={onToggle}>
+  { 'View as Public' }
+</div>
+}
+export const ClosePreviewBtn = ({ onToggle }) => {
+  return <div className={'p-2 m-1  border border-gray-800 inline-block'} onClick={onToggle}>
+  { 'Close' }
+</div>
+}
+
+export const OpenBtn = ({ href }) => {
+  return <a className={'p-2 m-1  border border-gray-800 inline-block'} href={href} target="_blank">
+  { 'Open Preview Tab' }
+</a>
 }
 
 export const EditorBody = ({ children, page }) => {
@@ -90,12 +130,7 @@ export const EditorBody = ({ children, page }) => {
   const onSaveName = () => {
     savePageName({ _id: router.query.id, displayName: pageName, data: page.data })
   }
-
-  useEffect(() => {
-    if (iframe.current) {
-      iframe.current.src = pageURL
-    }
-  }, [pageURL])
+  const [showPreview, setShowPreview] = useState(false)
 
   return (
     <div>
@@ -113,55 +148,67 @@ export const EditorBody = ({ children, page }) => {
         <svg onClick={() => { onSaveName() }} className={'inline-block mx-3 cursor-pointer'} width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M11.492 10.172l-2.5 3.064-.737-.677 3.737-4.559 3.753 4.585-.753.665-2.5-3.076v7.826h-1v-7.828zm7.008 9.828h-13c-2.481 0-4.5-2.018-4.5-4.5 0-2.178 1.555-4.038 3.698-4.424l.779-.14.043-.789c.185-3.448 3.031-6.147 6.48-6.147 3.449 0 6.295 2.699 6.478 6.147l.044.789.78.14c2.142.386 3.698 2.246 3.698 4.424 0 2.482-2.019 4.5-4.5 4.5m.978-9.908c-.212-3.951-3.472-7.092-7.478-7.092s-7.267 3.141-7.479 7.092c-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.522-5.408"/></svg>
       </div>
 
+
+
       <div className="flex">
+
         <div style={{ width: `calc(300px)` }}>
           <div>
+            <PreviewBtn onToggle={() => { setShowPreview(!showPreview) }}></PreviewBtn>
             <SaveBtn></SaveBtn>
             <DeleteBtn></DeleteBtn>
+            <HistoryBtn></HistoryBtn>
           </div>
         </div>
 
-        <div className={'p-2'} style={{ width: `calc((100% - 300px))` }}>
+        <style>{`
+          .sticky-inner-wrapper{
+            z-index: 500;
+          }
+        `}</style>
+        <div style={{ width: `calc((100% - 300px))`, 'top': '0px' }}>
+          {/* <Sticky enabled={true} top={0} bottomBoundary={1200} zIndex={5000}> */}
+            <ToolTemplate title="Flex Box">
+              <Element canvas is={RE.FlexBox}>
+              </Element>
+            </ToolTemplate>
 
-          <ToolTemplate title="Flex Box">
-            <Element canvas is={RE.FlexBox}>
-            </Element>
-          </ToolTemplate>
+            <ToolTemplate title="HTML">
+              <Element is={RE.HTML}>
+              </Element>
+            </ToolTemplate>
 
-          <ToolTemplate title="HTML">
-            <Element is={RE.HTML}>
-            </Element>
-          </ToolTemplate>
+            <ToolTemplate title="JavaScript">
+              <Element is={RE.JavaScript}>
+              </Element>
+            </ToolTemplate>
 
-          <ToolTemplate title="JavaScript">
-            <Element is={RE.JavaScript}>
-            </Element>
-          </ToolTemplate>
+            <ToolTemplate title="CSS">
+              <Element is={RE.CSS}>
+              </Element>
+            </ToolTemplate>
 
-          <ToolTemplate title="CSS">
-            <Element is={RE.CSS}>
-            </Element>
-          </ToolTemplate>
-
-          <ToolTemplate title="FramedHTML">
-            <Element is={RE.FramedHTML}>
-            </Element>
-          </ToolTemplate>
-
+            <ToolTemplate title="FramedHTML">
+              <Element is={RE.FramedHTML}>
+              </Element>
+            </ToolTemplate>
+          {/* </Sticky> */}
         </div>
       </div>
 
+      <div className={'h-12'}></div>
       <div className="flex">
-        <div style={{ width: `calc(300px)` }}>
+        <div style={{ width: `calc(380px)` }}>
           <SettingsPanel></SettingsPanel>
         </div>
 
-        <div style={{ width: `calc((100% - 300px) * 0.5)` }}>
+        <div style={{ width: `calc((100% - 380px) - 10px)`, marginLeft: '5px', marginRight: '5px' }}>
           {/* main canvas */}
           {children}
         </div>
-        <div style={{ width: `calc((100% - 300px) * 0.5)`, border: 'black solid 1px' }}>
-          <iframe ref={iframe} style={{}} className={'w-full h-full'}></iframe>
+        <div className={`fixed top-0 right-0 bg-white h-screen transition-transform duration-500 ease-out ${cx({ ' translate-x-full transform-gpu': !showPreview })} `} style={{ width: `calc((100% - 380px))`, zIndex: 200000, border: 'black solid 1px' }}>
+          <div><ClosePreviewBtn onToggle={() => { setShowPreview(!showPreview) }}></ClosePreviewBtn><OpenBtn href={pageURL}></OpenBtn></div>
+          {<iframe src={pageURL} style={{}} className={'w-full h-full p-3'}></iframe>}
         </div>
       </div>
     </div>

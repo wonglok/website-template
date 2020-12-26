@@ -9,7 +9,9 @@ import { DevWrap } from "../DevWrap";
 export const FlexBox = ({ children, className }) => {
   return (
     <DevWrap>
-      {children}
+      <div className={className}>
+        {children}
+      </div>
     </DevWrap>
     // <div className={`${editable && classesEditable} ${className}`} ref={ref => connect(drag(ref))}>
     // </div>

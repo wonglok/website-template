@@ -35,7 +35,7 @@ export const FramedHTML = ({ isProductionMode = false, content, className }) => 
   // })
 
   return (
-    <DevWrap>
+    <DevWrap className={className}>
       {content && <FramedHTMLCore content={content}></FramedHTMLCore> }
     </DevWrap>
   )
