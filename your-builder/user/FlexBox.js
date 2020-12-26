@@ -1,6 +1,6 @@
 import React from "react";
 import { useNode } from "@craftjs/core";
-
+import { CanDropToFlex } from './Types'
 export const FlexBox = ({ children, className }) => {
   const { connectors: { connect, drag } } = useNode();
   return (
@@ -21,7 +21,7 @@ FlexBox.craft = {
     },
     canMoveIn: (income) => {
       let name = income.data.type.craft.name
-      return ['Text', 'HTML'].includes(name)
+      return CanDropToFlex.includes(name)
     },
     canMoveOut: () => {
       return true

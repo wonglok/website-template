@@ -11,27 +11,17 @@ const Iframe = ({ content }) => {
   useEffect(() => {
     if (iRef.current) {
       let frame = iRef.current
-
-      var element = window.document.createElement('html');
-      element.innerHTML = content;
-
-      iRef.current.appendChild(element)
-
-      // let doc = frame.contentDocument
-      // doc.open()
-      // doc.write(content)
-      // doc.close()
-
+      let doc = frame.contentDocument
+      doc.open()
+      doc.write(content)
+      doc.close()
       frame.style.width = '100%'
       frame.style.height = `100%`
     }
-    return () => [
-      iRef.current.innerHTML = ''
-    ]
   }, [content])
 
   return (
-    <div ref={iRef} />
+    <iframe src="about:blank" scrolling="no" frameBorder="0"  ref={iRef} />
   );
 };
 
@@ -119,7 +109,7 @@ export const Ace = ({ value = '', onSave = () => {}, onChange = () => {} }) => {
   return <div style={{ width: '100%', height: '500px' }} ref={ref}></div>
 }
 
-export const HTML = ({ isProductionMode = false, html, className }) => {
+export const FramedHTML = ({ isProductionMode = false, html, className }) => {
   const divRef = useRef()
   const { connectors: { connect, drag }, actions: { setProp }  } = useNode()
   const { selected, dragged } = useNode((state) => ({
@@ -130,7 +120,7 @@ export const HTML = ({ isProductionMode = false, html, className }) => {
   const [editable, setEditable] = useState(false);
 
   // useEffect(() => {
-  //   divRef.current.innerHTML = html
+  //   divRef.current.innerFramedHTML = html
   //   console.log(divRef.current)
   // }, [html, editable])
 
@@ -151,7 +141,7 @@ export const HTML = ({ isProductionMode = false, html, className }) => {
   )
 }
 
-const HTMLSettings = () => {
+const FramedHTMLSettings = () => {
   const { actions: { setProp }, html, className } = useNode((node) => ({
     html: node.data.props.html,
     className: node.data.props.className
@@ -184,17 +174,17 @@ const HTMLSettings = () => {
   )
 }
 
-HTML.craft = {
-  name: 'HTML',
+FramedHTML.craft = {
+  name: 'FramedHTML',
   props: {
     className: 'h-64 w-64',
-    html: `funfun html`,
+    html: require('raw-loader!../data/my-html.txt').default || '',
     textAlign: 'left',
     fontSize: 17,
     text: 'some text'
   },
   related: {
-    settings: HTMLSettings
+    settings: FramedHTMLSettings
   },
   rules: {
     canDrag: (node) => {

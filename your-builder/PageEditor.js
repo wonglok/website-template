@@ -4,17 +4,17 @@ import { useRef, useEffect, useState } from 'react'
 import React from "react";
 import { Editor, Frame, Element, useEditor, useNode } from "@craftjs/core"
 import { Pages, usePage } from '../your-cms/api';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 import * as RE from '../your-builder/user'
 
 export const ToolTemplate = ({ children = <Element is={RE.Text} canvas></Element>, title = 'Template' }) => {
   // const { connectors, query } = useEditor()
   const { connectors } = useEditor()
   return <div
-  ref={(ref) => {
-    connectors.create(ref, children)
-  }}
-  className={'p-2 m-3 border border-gray-800 inline-block'}>
+    ref={(ref) => {
+      connectors.create(ref, children)
+    }}
+    className={'p-2 m-3 border border-gray-800 inline-block'}>
     {title}
   </div>
 }
@@ -39,6 +39,16 @@ const SaveBtn = () => {
     let str = query.serialize()
     savePage({ _id: router.query.id, data: str })
   }
+  useEffect(() => {
+    let Shortcut = require('@codexteam/shortcuts')
+    new Shortcut({
+      name : 'CMD+S',
+      on: document.body,
+      callback: (event) => {
+        onSave()
+      }
+    })
+  }, [])
 
   return <div className={'px-3 py-2 m-3 border border-blue-500 text-blue-500 rounded-lg inline-block'} onClick={onSave}>Save</div>
 }
@@ -98,6 +108,10 @@ export const EditorBody = ({ children, page }) => {
           <div>
             <ToolTemplate title="HTML">
               <Element is={RE.HTML}>
+              </Element>
+            </ToolTemplate>
+            <ToolTemplate title="FramedHTML">
+              <Element is={RE.FramedHTML}>
               </Element>
             </ToolTemplate>
             <ToolTemplate title="Flex Box">
