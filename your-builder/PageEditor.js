@@ -122,7 +122,7 @@ export const PreviewSaveBtn = ({ show, togglePanel }) => {
     }
   }}>
     { !show && 'Save & Preview' }
-    { show && 'Close' }
+    { show && 'Close Drawer' }
   </div>
 }
 
