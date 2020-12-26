@@ -193,7 +193,7 @@ export const EditorBody = ({ children, page }) => {
           `}</style>
           <div style={{ width: `calc((100%))`, 'top': '0px' }}>
 
-            <Sticky innerClass={'bg-white'} enabled={true} top={0} bottomBoundary={0} zIndex={5000}>
+            <Sticky innerClass={'bg-white shadow-lg'} enabled={true} top={0} bottomBoundary={0} zIndex={5000}>
 
                 <ToolTemplate title="Flex Box">
                   <Element canvas is={RE.FlexBox}>
