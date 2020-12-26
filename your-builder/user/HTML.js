@@ -174,6 +174,9 @@ const HTMLSettings = () => {
       })}></input>
       <Ace
       value={html}
+      onUpdate={({ code }) => {
+
+      }}
       onSave={({ code }) => {
         setProp(props => {
           props.html = code

@@ -1,12 +1,17 @@
 import React from "react"
-import { useNode } from "@craftjs/core"
+import { useNode, useEditor } from "@craftjs/core"
 
-export const Page = ({ children, className }) => {
+export const Page = ({ children }) => {
+  // let { editable } = useEditor(state => {
+  //   return ({
+  //     editable: state.options.enabled
+  //   })
+  // })
+
   const { connectors: {connect, drag} } = useNode();
   return (
-    <div className={`block m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-black transition-colors shadow-xl duration-200 ${className}`} ref={ref => connect(drag(ref))}>
+    <div style={{ minHeight: '130px' }} ref={ref => connect(drag(ref))}>
       {children}
-      <div className={'h-32'}></div>
     </div>
   )
 }

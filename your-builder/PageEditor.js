@@ -116,7 +116,7 @@ export const EditorBody = ({ children, page }) => {
 
       {/* Old */}
       <div className="mx-3 flex justify-between">
-      <div style={{ width: `calc(275px)` }}>
+      <div style={{ width: `calc(380px)` }}>
           <SettingsPanel></SettingsPanel>
           <div>
             <ToolTemplate title="HTML">
@@ -141,10 +141,10 @@ export const EditorBody = ({ children, page }) => {
           </div>
         </div>
 
-        <div style={{ width: `calc((100% - 275px) * 0.5)` }}>
+        <div style={{ width: `calc((100% - 380px) * 0.5)` }}>
           {children}
         </div>
-        <div style={{ width: `calc((100% - 275px) * 0.5)` }}>
+        <div style={{ width: `calc((100% - 380px) * 0.5)` }}>
           <iframe ref={iframe} style={{}} className={'w-full h-full'}></iframe>
         </div>
       </div>

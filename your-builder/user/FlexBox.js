@@ -11,9 +11,9 @@ export const FlexBox = ({ children, className }) => {
     })
   })
   const { connectors: { connect, drag } } = useNode();
-  const devClasses = `m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl `
+  const devClasses = `m-4 p-4 border border-black`
   return (
-    <div className={`flex ${editable && devClasses} ${className}`} ref={ref => connect(drag(ref))}>
+    <div className={`${editable && devClasses} ${className}`} ref={ref => connect(drag(ref))}>
       {children}
     </div>
   )
@@ -34,7 +34,6 @@ const FlexBoxSettings = () => {
 
   return (
     <>
-      {/* Apple */}
       <textarea value={className} onInput={e => setProp(props => {
         props.className = e.target.value
       })}></textarea>
@@ -57,7 +56,7 @@ const FlexBoxSettings = () => {
 FlexBox.craft = {
   name: 'FlexBox',
   props: {
-    className: 'm-3 p-3 border'
+    className: 'flex'
   },
   related: {
     settings: FlexBoxSettings
