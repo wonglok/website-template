@@ -85,12 +85,19 @@ export const SettingsPanel = () => {
 }
 
 export const EditorBody = ({ children, page }) => {
+  const iframe = useRef()
   const [pageName, setPageName] = useState(page.displayName)
   const router = useRouter()
   const savePageName = usePage(state => state.savePageName)
   const onSaveName = () => {
     savePageName({ _id: router.query.id, displayName: pageName, data: page.data })
   }
+
+  useEffect(() => {
+    if (iframe.current) {
+      iframe.current.src = `/${page.slug}?r=${Math.random()}`
+    }
+  }, [page.data])
 
   return (
     <div>
@@ -138,8 +145,7 @@ export const EditorBody = ({ children, page }) => {
           {children}
         </div>
         <div style={{ width: `calc((100% - 275px) * 0.5)` }}>
-          {/* {`/${page.slug}`} */}
-          <iframe style={{}} className={'w-full h-full'} src={`/${page.slug}`}></iframe>
+          <iframe ref={iframe} style={{}} className={'w-full h-full'}></iframe>
         </div>
       </div>
     </div>

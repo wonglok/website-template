@@ -11,9 +11,9 @@ export const FlexBox = ({ children, className }) => {
     })
   })
   const { connectors: { connect, drag } } = useNode();
-  const devClasses = `m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl flex `
+  const devClasses = `m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl `
   return (
-    <div className={`border m-4 p-4 ${editable && devClasses} ${className}`} ref={ref => connect(drag(ref))}>
+    <div className={`flex ${editable && devClasses} ${className}`} ref={ref => connect(drag(ref))}>
       {children}
     </div>
   )

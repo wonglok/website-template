@@ -86,7 +86,7 @@ class SDKCore {
 
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || 'unable to get myself'
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || 'unable to get myself'
       return Promise.reject(msg)
     })
   }
@@ -111,7 +111,7 @@ class SDKCore {
 
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || 'unable to get myself'
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || 'unable to get myself'
       return Promise.reject(msg)
     })
   }
@@ -135,7 +135,7 @@ class SDKCore {
 
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || 'unable to get myself'
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || 'unable to get myself'
       return Promise.reject(msg)
     })
   }
@@ -159,7 +159,7 @@ class SDKCore {
 
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || 'unable to get myself'
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || 'unable to get myself'
       return Promise.reject(msg)
     })
   }
@@ -180,7 +180,7 @@ class SDKCore {
 
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || 'unable to get myself'
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || 'unable to get myself'
       return Promise.reject(msg)
     })
   }
@@ -204,7 +204,7 @@ class SDKCore {
 
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || 'unable to login'
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || 'unable to login'
       return Promise.reject(msg)
     })
   }
@@ -226,7 +226,7 @@ class SDKCore {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || 'unable to register'
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || 'unable to register'
       return Promise.reject(msg)
     })
   }
@@ -251,7 +251,7 @@ class SDKCore {
 
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || 'unable to register'
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || 'unable to register'
       return Promise.reject(msg)
     })
   }
@@ -291,7 +291,7 @@ class DocOperation {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || `unable to ${action}`
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
       return Promise.reject(msg)
     })
   }
@@ -309,7 +309,7 @@ class DocOperation {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || `unable to ${action}`
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
       return Promise.reject(msg)
     })
   }
@@ -329,7 +329,7 @@ class DocOperation {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || `unable to ${action}`
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
       return Promise.reject(msg)
     })
   }
@@ -349,7 +349,7 @@ class DocOperation {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || `unable to ${action}`
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
       return Promise.reject(msg)
     })
   }
@@ -369,7 +369,7 @@ class DocOperation {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || `unable to ${action}`
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
       return Promise.reject(msg)
     })
   }
@@ -390,7 +390,7 @@ class DocOperation {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || `unable to ${action}`
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
       return Promise.reject(msg)
     })
   }
@@ -407,7 +407,7 @@ class DocOperation {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || `unable to ${action}`
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
       return Promise.reject(msg)
     })
   }
@@ -427,7 +427,7 @@ class DocOperation {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || `unable to ${action}`
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
       return Promise.reject(msg)
     })
   }
@@ -447,7 +447,7 @@ class DocOperation {
     }).then(res => {
       return res.data
     }, (err) => {
-      let msg = err.response.data.msg || `unable to ${action}`
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
       return Promise.reject(msg)
     })
   }
