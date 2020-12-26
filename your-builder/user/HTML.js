@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from "react"
-import { useNode } from "@craftjs/core"
+import { useNode, useEditor } from "@craftjs/core"
 import ContentEditable from 'react-contenteditable'
 import sanitizeHtml from 'sanitize-html'
+import { useRouter } from 'next/router'
+import { usePage } from "../../your-cms/api"
+
 
 export const Ace = ({ value = '', onSave = () => {}, onChange = () => {} }) => {
   let ref = useRef()
@@ -114,24 +117,37 @@ export const HTML = ({ isProductionMode = false, html, className }) => {
 
   return (
     <div className={`${devClass} ${className}`} ref={ref => connect(drag(ref))}>
-      <div ref={divRef}></div>
+      <div className={`w-full h-full`} ref={divRef}></div>
     </div>
   )
 }
 
 const HTMLSettings = () => {
-  const { actions: { setProp }, html } = useNode((node) => ({
-    html: node.data.props.html
+  const { actions: { setProp }, html, className } = useNode((node) => ({
+    html: node.data.props.html,
+    className: node.data.props.className
   }));
+
+  const router = useRouter()
+  const { query } = useEditor()
+  const savePage = usePage(state => state.savePage)
+  const goSave = () => {
+    let str = query.serialize()
+    savePage({ _id: router.query.id, data: str })
+  }
 
   return (
     <>
+      <input value={className} onInput={e => setProp(props => {
+        props.className = e.target.value
+      })}></input>
       <Ace
       value={html}
       onSave={({ code }) => {
         setProp(props => {
           props.html = code
           console.log(code)
+          goSave()
         })
       }}
       ></Ace>
@@ -142,6 +158,7 @@ const HTMLSettings = () => {
 HTML.craft = {
   name: 'HTML',
   props: {
+    className: '',
     html: '',
     textAlign: 'left',
     fontSize: 17,

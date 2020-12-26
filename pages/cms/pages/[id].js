@@ -8,11 +8,12 @@ import Head from 'next/head'
 export function CMSApp () {
   return (
     <div>
-      <CMSLayout isFull={true}>
-        <AdminArea>
-          <PageEditor></PageEditor>
-        </AdminArea>
-      </CMSLayout>
+      <AdminArea>
+        <PageEditor></PageEditor>
+      </AdminArea>
+      {/* <CMSLayout isFull={true}>
+
+      </CMSLayout> */}
     </div>
   )
 }

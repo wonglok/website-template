@@ -32,8 +32,8 @@ const DeleteBtn = () => {
 }
 
 const SaveBtn = () => {
-  const { query } = useEditor()
   const router = useRouter()
+  const { query } = useEditor()
   const savePage = usePage(state => state.savePage)
   const onSave = () => {
     let str = query.serialize()
@@ -64,6 +64,7 @@ export const SettingsPanel = () => {
 
   return <div>
     <div>
+      <SaveBtn></SaveBtn>
       <DeleteBtn></DeleteBtn>
     </div>
     <div>
@@ -75,22 +76,26 @@ export const SettingsPanel = () => {
 }
 
 export const EditorBody = ({ children, page }) => {
+  const router = useRouter()
   return (
     <div>
       {/* Header */}
       <div className="mx-6 my-6 text-4xl font-semibold dark:text-gray-400">
         Page: {page && page.displayName}
       </div>
+      <div onClick={() => { router.push('/cms/pages') }} className="mx-6 text-2xl font-normal inline-flex items-center cursor-pointer">
+        <svg className="inline mr-3" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M2.117 12l7.527 6.235-.644.765-9-7.521 9-7.479.645.764-7.529 6.236h21.884v1h-21.883z"/></svg>
+        Save and Exit
+      </div>
 
       {/* Old */}
       <div className="mx-3 flex justify-between">
       <div style={{ width: `calc(280px)` }}>
           <div>
-            <SaveBtn></SaveBtn>
+
           </div>
 
           <div>
-
             <ToolTemplate title="HTML">
               <Element is={RE.HTML}>
               </Element>
