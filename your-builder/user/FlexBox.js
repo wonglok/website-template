@@ -1,13 +1,10 @@
 import React from "react";
 import { useNode } from "@craftjs/core";
-import cx from 'classnames'
-export const FlexBox = ({ children, centerX, centerY, className }) => {
+
+export const FlexBox = ({ children, className }) => {
   const { connectors: { connect, drag } } = useNode();
   return (
-    <div className={cx({
-      ['justify-center']: centerX,
-      ['items-center']: centerY
-    }) + ` m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl flex ${className}`} ref={ref => connect(drag(ref))}>
+    <div className={`m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl flex ${className}`} ref={ref => connect(drag(ref))}>
       {children}
     </div>
   )
@@ -15,6 +12,7 @@ export const FlexBox = ({ children, centerX, centerY, className }) => {
 
 FlexBox.craft = {
   name: 'FlexBox',
+
   rules: {
     canDrag: (node) => {
       return true

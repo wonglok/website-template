@@ -1,5 +1,10 @@
-export { Page } from './Page'
-export { Block } from './Block'
-export { FlexAround } from './FlexAround'
-export { FlexBox } from './FlexBox'
-export { Text } from './Text'
+import { Page } from './Page'
+import { FlexBox } from './FlexBox'
+import { Text } from './Text'
+
+
+export {
+  Page,
+  FlexBox,
+  Text
+}

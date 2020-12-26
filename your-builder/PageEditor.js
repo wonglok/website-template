@@ -26,20 +26,6 @@ const DeleteBtn = () => {
     isDeletable: state.events.selected && query.node(state.events.selected).isDeletable()
   }));
 
-  useEffect(() => {
-    if (selectedNodeId) {
-      // const node = query.node(selectedNodeId)
-      // const instance = node.get()
-      // instance.dom.classList.add('border-blue-500')
-      // instance.dom.classList.add('rounded-2xl')
-
-      return () => {
-        // instance.dom.classList.remove('border-blue-500')
-        // instance.dom.classList.remove('rounded-2xl')
-      }
-    }
-  }, [selectedNodeId, isDeletable])
-
   return selectedNodeId && (
     <div className={'px-3 py-2 m-3 border border-red-500 text-red-500 rounded-lg inline-block ' + ' ' + (isDeletable ? '' : 'opacity-50')} onClick={() => isDeletable && actions.delete(selectedNodeId)}>Delete</div>
   )
@@ -57,10 +43,33 @@ const SaveBtn = () => {
   return <div className={'px-3 py-2 m-3 border border-blue-500 text-blue-500 rounded-lg inline-block'} onClick={onSave}>Save</div>
 }
 
-export const SelectedItem = () => {
+export const SettingsPanel = () => {
+  const { selected } = useEditor((state) => {
+    const currentNodeId = state.events.selected;
+    let selected;
+
+    if ( currentNodeId ) {
+      selected = {
+        id: currentNodeId,
+        name: state.nodes[currentNodeId].data.name,
+        settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings
+      };
+    }
+
+    return {
+      selected
+    }
+  });
+
+
   return <div>
     <div>
       <DeleteBtn></DeleteBtn>
+    </div>
+    <div>
+      {
+        selected && selected.settings && React.createElement(selected.settings)
+      }
     </div>
   </div>
 }
@@ -81,8 +90,8 @@ export const EditorBody = ({ children, page }) => {
           </div>
 
           <div>
-            <ToolTemplate title="Flex Around">
-              <Element canvas is={RE.FlexAround}>
+            <ToolTemplate title="Flex Box">
+              <Element canvas is={RE.FlexBox}>
               </Element>
             </ToolTemplate>
             <ToolTemplate title="Text">
@@ -95,7 +104,7 @@ export const EditorBody = ({ children, page }) => {
           {children}
         </div>
         <div style={{ width: `calc(280px)` }}>
-          <SelectedItem></SelectedItem>
+          <SettingsPanel></SettingsPanel>
         </div>
       </div>
     </div>

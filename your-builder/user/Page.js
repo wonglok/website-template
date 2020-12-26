@@ -22,7 +22,7 @@ Page.craft = {
     },
     canMoveIn: (income) => {
       let name = income.data.type.craft.name
-      return ['Block', 'FlexAround'].includes(name)
+      return ['FlexBox'].includes(name)
     },
     canMoveOut: () => {
       return true
