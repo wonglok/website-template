@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNode } from "@craftjs/core"
+import { useNode, useEditor } from "@craftjs/core"
 import ContentEditable from 'react-contenteditable'
 import sanitizeHtml from 'sanitize-html'
 export const Text = ({ text, className, textAlign, fontSize }) => {
@@ -8,8 +8,13 @@ export const Text = ({ text, className, textAlign, fontSize }) => {
     selected: state.events.selected,
     dragged: state.events.dragged
   }));
+  let { editable } = useEditor(state => {
+    return ({
+      editable: state.options.enabled
+    })
+  })
 
-  const [editable, setEditable] = useState(false);
+  const [canEdit, setEditable] = useState(false);
 
   useEffect(() => {
     if (!selected) {
@@ -22,8 +27,8 @@ export const Text = ({ text, className, textAlign, fontSize }) => {
 
   return (
     <div className={`block m-4 p-4 whitespace-pre-wrap bg-opacity-5 hover:bg-opacity-20 border border-gray-300 transition-colors duration-200 ${className}`} ref={ref => connect(drag(ref))}>
-      <ContentEditable
-        contentEditable={editable}
+      {editable && <ContentEditable
+        contentEditable={canEdit}
         html={text}
         onChange={e => {
           setProp(props => {
@@ -32,7 +37,7 @@ export const Text = ({ text, className, textAlign, fontSize }) => {
         }}
         tagName="p"
         style={{ fontSize: `${fontSize}px`, textAlign, height: '100%', 'outline': 'none' }}
-      />
+      /> || <p style={{ fontSize: `${fontSize}px`, textAlign, height: '100%', 'outline': 'none' }}>{text}</p>}
     </div>
   )
 }

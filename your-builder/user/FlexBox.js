@@ -5,9 +5,15 @@ import { useRouter } from "next/router";
 import { usePage } from "../../your-cms/api";
 
 export const FlexBox = ({ children, className }) => {
+  let { editable } = useEditor(state => {
+    return ({
+      editable: state.options.enabled
+    })
+  })
   const { connectors: { connect, drag } } = useNode();
+  const devClasses = `m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl flex `
   return (
-    <div className={`${className}`} ref={ref => connect(drag(ref))}>
+    <div className={`border m-4 p-4 ${editable && devClasses} ${className}`} ref={ref => connect(drag(ref))}>
       {children}
     </div>
   )
@@ -51,7 +57,7 @@ const FlexBoxSettings = () => {
 FlexBox.craft = {
   name: 'FlexBox',
   props: {
-    className: `m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl flex `
+    className: 'm-3 p-3 border'
   },
   related: {
     settings: FlexBoxSettings

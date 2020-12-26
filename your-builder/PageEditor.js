@@ -110,8 +110,9 @@ export const EditorBody = ({ children, page }) => {
       {/* Old */}
       <div className="mx-3 flex justify-between">
       <div style={{ width: `calc(275px)` }}>
+          <SettingsPanel></SettingsPanel>
           <div>
-          <ToolTemplate title="HTML">
+            <ToolTemplate title="HTML">
               <Element is={RE.HTML}>
               </Element>
             </ToolTemplate>
@@ -133,11 +134,12 @@ export const EditorBody = ({ children, page }) => {
           </div>
         </div>
 
-        <div style={{ width: `calc(100% - 275px - 385px)` }}>
+        <div style={{ width: `calc((100% - 275px) * 0.5)` }}>
           {children}
         </div>
-        <div style={{ width: `calc(385px)` }}>
-          <SettingsPanel></SettingsPanel>
+        <div style={{ width: `calc((100% - 275px) * 0.5)` }}>
+          {/* {`/${page.slug}`} */}
+          <iframe style={{}} className={'w-full h-full'} src={`/${page.slug}`}></iframe>
         </div>
       </div>
     </div>
@@ -150,13 +152,20 @@ export const PageEditor = () => {
   let pageData = usePage(state => state.page.data)
   let loadPage = usePage(state => state.loadPage)
 
+  // let onNodesChange = async (query) => {
+  //   let cloned = JSON.parse(JSON.stringify(page))
+  //   cloned.data = query.serialize()
+  //   await Pages.updateMine({ doc: cloned })
+  // }
+  // onNodesChange={onNodesChange}
+
   useEffect(() => {
     loadPage({ _id: router.query.id })
   }, [router.query.id])
 
   return (
     <div>
-      {page && <Editor resolver={{ ...RE }}>
+      {page && <Editor resolver={{ ...RE }} >
         <EditorBody page={page}>
           <Frame data={pageData}>
             <Element is={RE.Page} canvas></Element>
