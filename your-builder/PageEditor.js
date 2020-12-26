@@ -133,10 +133,10 @@ export const EditorBody = ({ children, page }) => {
           </div>
         </div>
 
-        <div style={{ width: `calc(100% - 275px - 360px)` }}>
+        <div style={{ width: `calc(100% - 275px - 385px)` }}>
           {children}
         </div>
-        <div style={{ width: `calc(360px)` }}>
+        <div style={{ width: `calc(385px)` }}>
           <SettingsPanel></SettingsPanel>
         </div>
       </div>
