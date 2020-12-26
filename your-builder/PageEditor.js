@@ -64,7 +64,6 @@ export const SettingsPanel = () => {
         name: state.nodes[currentNodeId].data.name,
         settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings
       };
-      // query.node(currentNodeId)
     }
 
     return {
@@ -90,7 +89,7 @@ export const EditorBody = ({ children, page }) => {
   const router = useRouter()
   const savePageName = usePage(state => state.savePageName)
   const onSaveName = () => {
-    savePageName({ _id: router.query.id, displayName: pageName })
+    savePageName({ _id: router.query.id, displayName: pageName, data: page.data })
   }
 
   return (
@@ -110,11 +109,7 @@ export const EditorBody = ({ children, page }) => {
 
       {/* Old */}
       <div className="mx-3 flex justify-between">
-      <div style={{ width: `calc(280px)` }}>
-          <div>
-
-          </div>
-
+      <div style={{ width: `calc(275px)` }}>
           <div>
           <ToolTemplate title="HTML">
               <Element is={RE.HTML}>
@@ -138,10 +133,10 @@ export const EditorBody = ({ children, page }) => {
           </div>
         </div>
 
-        <div style={{ width: `calc(100% - 280px * 2)` }}>
+        <div style={{ width: `calc(100% - 275px - 360px)` }}>
           {children}
         </div>
-        <div style={{ width: `calc(280px)` }}>
+        <div style={{ width: `calc(360px)` }}>
           <SettingsPanel></SettingsPanel>
         </div>
       </div>
