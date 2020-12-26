@@ -14,7 +14,7 @@ export const ToolTemplate = ({ children = <Element is={RE.Text} canvas></Element
     ref={(ref) => {
       connectors.create(ref, children)
     }}
-    className={'p-2 m-3 border border-gray-800 inline-block'}>
+    className={'p-2 m-1  border border-gray-800 inline-block'}>
     {title}
   </div>
 }
@@ -27,7 +27,7 @@ const DeleteBtn = () => {
   }));
 
   return selectedNodeId && (
-    <div className={'px-3 py-2 m-3 border border-red-500 text-red-500 rounded-lg inline-block ' + ' ' + (isDeletable ? '' : 'opacity-50')} onClick={() => isDeletable && actions.delete(selectedNodeId)}>Delete</div>
+    <div className={'p-2 m-1  border border-gray-800 inline-block ' + ' ' + (isDeletable ? '' : 'opacity-50')} onClick={() => isDeletable && actions.delete(selectedNodeId)}>Delete</div>
   )
 }
 
@@ -43,14 +43,14 @@ const SaveBtn = () => {
     let Shortcut = require('@codexteam/shortcuts')
     new Shortcut({
       name : 'CMD+S',
-      on: document.body,
+      on: window,
       callback: (event) => {
         onSave()
       }
     })
   }, [])
 
-  return <div className={'px-3 py-2 m-3 border border-blue-500 text-blue-500 rounded-lg inline-block'} onClick={onSave}>Save</div>
+  return <div className={'p-2 m-1  border border-gray-800 inline-block'} onClick={onSave}>Save</div>
 }
 
 export const SettingsPanel = () => {
@@ -72,10 +72,7 @@ export const SettingsPanel = () => {
   });
 
   return <div>
-    <div>
-      <SaveBtn></SaveBtn>
-      <DeleteBtn></DeleteBtn>
-    </div>
+
     <div>
       {
         selected && selected.settings && React.createElement(selected.settings)
@@ -89,19 +86,25 @@ export const EditorBody = ({ children, page }) => {
   const [pageName, setPageName] = useState(page.displayName)
   const router = useRouter()
   const savePageName = usePage(state => state.savePageName)
+  const pageURL = usePage(state => state.pageURL)
   const onSaveName = () => {
     savePageName({ _id: router.query.id, displayName: pageName, data: page.data })
   }
 
   useEffect(() => {
     if (iframe.current) {
-      iframe.current.src = `/${page.slug}?r=${Math.random()}`
+      iframe.current.src = pageURL
     }
-  }, [page.data])
+  }, [pageURL])
 
   return (
     <div>
       {/* Header */}
+      <div onClick={() => { router.push('/cms/pages') }} className="mx-6 mt-6 text-2xl font-normal inline-flex items-center cursor-pointer">
+        <svg className="inline mr-3" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M2.117 12l7.527 6.235-.644.765-9-7.521 9-7.479.645.764-7.529 6.236h21.884v1h-21.883z"/></svg>
+        Save and Exit
+      </div>
+
       <div className="mx-6 my-6 text-4xl font-semibold dark:text-gray-400">
         Page:
         <div className={'inline-block ml-3'}>
@@ -109,42 +112,55 @@ export const EditorBody = ({ children, page }) => {
         </div>
         <svg onClick={() => { onSaveName() }} className={'inline-block mx-3 cursor-pointer'} width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M11.492 10.172l-2.5 3.064-.737-.677 3.737-4.559 3.753 4.585-.753.665-2.5-3.076v7.826h-1v-7.828zm7.008 9.828h-13c-2.481 0-4.5-2.018-4.5-4.5 0-2.178 1.555-4.038 3.698-4.424l.779-.14.043-.789c.185-3.448 3.031-6.147 6.48-6.147 3.449 0 6.295 2.699 6.478 6.147l.044.789.78.14c2.142.386 3.698 2.246 3.698 4.424 0 2.482-2.019 4.5-4.5 4.5m.978-9.908c-.212-3.951-3.472-7.092-7.478-7.092s-7.267 3.141-7.479 7.092c-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.522-5.408"/></svg>
       </div>
-      <div onClick={() => { router.push('/cms/pages') }} className="mx-6 text-2xl font-normal inline-flex items-center cursor-pointer">
-        <svg className="inline mr-3" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M2.117 12l7.527 6.235-.644.765-9-7.521 9-7.479.645.764-7.529 6.236h21.884v1h-21.883z"/></svg>
-        Save and Exit
-      </div>
 
-      {/* Old */}
-      <div className="mx-3 flex justify-between">
-      <div style={{ width: `calc(380px)` }}>
-          <SettingsPanel></SettingsPanel>
+      <div className="flex">
+        <div style={{ width: `calc(300px)` }}>
           <div>
-            <ToolTemplate title="HTML">
-              <Element is={RE.HTML}>
-              </Element>
-            </ToolTemplate>
-            <ToolTemplate title="JavaScript">
-              <Element is={RE.JavaScript}>
-              </Element>
-            </ToolTemplate>
-            <ToolTemplate title="FramedHTML">
-              <Element is={RE.FramedHTML}>
-              </Element>
-            </ToolTemplate>
-            <ToolTemplate title="Flex Box">
-              <Element canvas is={RE.FlexBox}>
-              </Element>
-            </ToolTemplate>
-            <ToolTemplate title="Text">
-              <Element is={RE.Text} text="Text Box Here"></Element>
-            </ToolTemplate>
+            <SaveBtn></SaveBtn>
+            <DeleteBtn></DeleteBtn>
           </div>
         </div>
 
-        <div style={{ width: `calc((100% - 380px) * 0.5)` }}>
+        <div className={'p-2'} style={{ width: `calc((100% - 300px))` }}>
+
+          <ToolTemplate title="Flex Box">
+            <Element canvas is={RE.FlexBox}>
+            </Element>
+          </ToolTemplate>
+
+          <ToolTemplate title="HTML">
+            <Element is={RE.HTML}>
+            </Element>
+          </ToolTemplate>
+
+          <ToolTemplate title="JavaScript">
+            <Element is={RE.JavaScript}>
+            </Element>
+          </ToolTemplate>
+
+          <ToolTemplate title="CSS">
+            <Element is={RE.CSS}>
+            </Element>
+          </ToolTemplate>
+
+          <ToolTemplate title="FramedHTML">
+            <Element is={RE.FramedHTML}>
+            </Element>
+          </ToolTemplate>
+
+        </div>
+      </div>
+
+      <div className="flex">
+        <div style={{ width: `calc(300px)` }}>
+          <SettingsPanel></SettingsPanel>
+        </div>
+
+        <div style={{ width: `calc((100% - 300px) * 0.5)` }}>
+          {/* main canvas */}
           {children}
         </div>
-        <div style={{ width: `calc((100% - 380px) * 0.5)` }}>
+        <div style={{ width: `calc((100% - 300px) * 0.5)`, border: 'black solid 1px' }}>
           <iframe ref={iframe} style={{}} className={'w-full h-full'}></iframe>
         </div>
       </div>
@@ -157,13 +173,11 @@ export const PageEditor = () => {
   let page = usePage(state => state.page)
   let pageData = usePage(state => state.page.data)
   let loadPage = usePage(state => state.loadPage)
+  let syncPage = usePage(state => state.syncPage)
 
-  // let onNodesChange = async (query) => {
-  //   let cloned = JSON.parse(JSON.stringify(page))
-  //   cloned.data = query.serialize()
-  //   await Pages.updateMine({ doc: cloned })
-  // }
-  // onNodesChange={onNodesChange}
+  let onNodesChange = async (query) => {
+    syncPage({ data: query.serialize() })
+  }
 
   useEffect(() => {
     loadPage({ _id: router.query.id })
@@ -172,7 +186,7 @@ export const PageEditor = () => {
   return (
     <div>
       {page && <Editor resolver={{ ...RE }} >
-        <EditorBody page={page}>
+        <EditorBody page={page} onNodesChange={onNodesChange}>
           <Frame data={pageData}>
             <Element is={RE.Page} canvas></Element>
           </Frame>

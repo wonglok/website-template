@@ -470,8 +470,9 @@ export const Pages = new EndPointSDK({ SDK, endpoint: `/api/cms/pages` })
 
 export const usePage = create((set, get) => {
   return {
-    selected: false,
     page: false,
+    pageURL: 'about:blank',
+
     savePageName: async ({ _id, displayName, data }) => {
       let res = await Pages.updateMine({
         doc: {
@@ -480,7 +481,7 @@ export const usePage = create((set, get) => {
           displayName
         }
       })
-      set({ page: res })
+      set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
     },
     savePage: async ({ _id, data }) => {
       let res = await Pages.updateMine({
@@ -489,15 +490,17 @@ export const usePage = create((set, get) => {
           data
         }
       })
-      set({ page: res })
+      set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+    },
+    syncPage: async ({ data }) => {
+      let res = JSON.parse(JSON.stringify(get().page))
+      res.data = data
+      set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
     },
     loadPage: async ({ _id }) => {
       let res = await Pages.findOneMine({ query: { _id } })
-      set({ page: res })
+      set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
       return res
-    },
-    select: async ({ node }) => {
-      set({ select: node })
     }
   }
 })

@@ -4,6 +4,7 @@ import { Text } from './Text'
 import { HTML } from './HTML'
 import { FramedHTML } from './FramedHTML'
 import { JavaScript } from './JavaScript'
+import { CSS } from './CSS'
 
 export {
   Page,
@@ -11,5 +12,8 @@ export {
   Text,
   HTML,
   FramedHTML,
-  JavaScript
+  JavaScript,
+  CSS
 }
+
+//

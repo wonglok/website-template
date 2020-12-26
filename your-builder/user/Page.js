@@ -1,17 +1,20 @@
 import React from "react"
 import { useNode, useEditor } from "@craftjs/core"
+import { LayoutBlocks } from "../Types"
+import { DevWrap } from "../DevWrap"
 
 export const Page = ({ children }) => {
-  // let { editable } = useEditor(state => {
-  //   return ({
-  //     editable: state.options.enabled
-  //   })
-  // })
+  let { editable } = useEditor(state => {
+    return ({
+      editable: state.options.enabled
+    })
+  })
 
-  const { connectors: {connect, drag} } = useNode();
+  const { connectors: { connect, drag } } = useNode();
   return (
-    <div style={{ minHeight: '130px' }} ref={ref => connect(drag(ref))}>
+    <div className={'border border-black'}>
       {children}
+      {editable && <div className={'h-24'}></div>}
     </div>
   )
 }
@@ -27,7 +30,7 @@ Page.craft = {
     },
     canMoveIn: (income) => {
       let name = income.data.type.craft.name
-      return ['FlexBox'].includes(name)
+      return LayoutBlocks.includes(name)
     },
     canMoveOut: () => {
       return true
