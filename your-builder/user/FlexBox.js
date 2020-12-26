@@ -1,18 +1,20 @@
 import React from "react";
 import { useNode } from "@craftjs/core";
-
-export const FlexAround = ({ children, className }) => {
+import cx from 'classnames'
+export const FlexBox = ({ children, centerX, centerY, className }) => {
   const { connectors: { connect, drag } } = useNode();
-
   return (
-    <div className={`m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl flex justify-around ${className}`} ref={ref => connect(drag(ref))}>
+    <div className={cx({
+      ['justify-center']: centerX,
+      ['items-center']: centerY
+    }) + ` m-4 p-4 bg-opacity-5 hover:bg-opacity-20 border border-gray-500 transition-colors duration-200 shadow-xl rounded-2xl flex ${className}`} ref={ref => connect(drag(ref))}>
       {children}
     </div>
   )
 }
 
-FlexAround.craft = {
-  name: 'FlexAround',
+FlexBox.craft = {
+  name: 'FlexBox',
   rules: {
     canDrag: (node) => {
       return true

@@ -30,7 +30,7 @@ export function MyLink ({ children, href }) {
   return <Link href={href}>{React.cloneElement(children, { className })}</Link>
 }
 
-export function CMSLayout ({ children, onClickCTA = () => {}, cta }) {
+export function CMSLayout ({ children, isFull = false }) {
   const [user] = useUserInfo()
   const router = useRouter()
   const logout = () => SDK.logout()
@@ -165,7 +165,7 @@ export function CMSLayout ({ children, onClickCTA = () => {}, cta }) {
       <main
         className="flex-1 flex flex-col bg-gray-100 dark:bg-gray-700 transition
         duration-500 ease-in-out overflow-y-auto">
-        <div className="mx-10 my-2">
+        <div className={isFull ? '' : 'mx-10 my-2'}>
           {children || null}
         </div>
 

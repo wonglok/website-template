@@ -451,7 +451,6 @@ class DocOperation {
       return Promise.reject(msg)
     })
   }
-
 }
 
 class EndPointSDK extends DocOperation {
@@ -480,10 +479,7 @@ export const usePage = create((set, get) => {
           data
         }
       })
-
-      set(() => {
-        return { page: res }
-      })
+      set({ page: res })
     },
     loadPage: async ({ _id }) => {
       let res = await Pages.findOneMine({ query: { _id } })
