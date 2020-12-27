@@ -1,6 +1,6 @@
 import React from "react"
 import { useNode, useEditor } from "@craftjs/core"
-import { LayoutBlocks } from "../Types"
+import { HiddenBlocks, LayoutBlocks } from "../Types"
 import { DevWrap } from "../DevWrap"
 
 export const Page = ({ children }) => {
@@ -40,7 +40,7 @@ Page.craft = {
     canMoveIn: (income) => {
       let name = income.data.type.craft.name
       console.log(name)
-      return LayoutBlocks.includes(name)
+      return [...LayoutBlocks, HiddenBlocks].includes(name)
     },
     canMoveOut: () => {
       return true
