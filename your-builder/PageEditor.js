@@ -96,7 +96,7 @@ export const SettingsPanel = () => {
         selected && selected.name
       }
     </div>}
-    <div class={"mx-1"}>
+    <div className={"mx-1"}>
       {
         selected && selected.settings && React.createElement(selected.settings)
       }
@@ -114,15 +114,19 @@ export const PreviewSaveBtn = ({ show, togglePanel }) => {
   }
 
   return <div className={'p-2 m-1 border border-gray-800 inline-block'} onClick={() => {
-    if (!show) {
-      onSave()
-      togglePanel()
-    } else {
-      togglePanel()
-    }
+    // if (!show) {
+    //   onSave()
+    //   togglePanel()
+    // } else {
+    //   togglePanel()
+    // }
+
+    onSave()
+      // togglePanel()
   }}>
-    { !show && 'Save & Preview' }
-    { show && 'Close Drawer' }
+    Save & Preview
+    {/* { !show && 'Save & Preview' }
+    { show && 'Close Drawer' } */}
   </div>
 }
 
@@ -224,16 +228,28 @@ export const EditorBody = ({ children, page }) => {
             {/* main canvas */}
             {/* <div className={'h-12'}></div> */}
 
-            {children}
+            <div className={'flex justify-between'}>
+              <div className="w-1/3">{children}</div>
+              <div className="w-2/3">{<iframe src={pageURL} style={{ }} height={window.innerHeight} className={'w-full border border-gray-600'}></iframe>}</div>
+            </div>
           </div>
-
-
         </div>
-        <div className={`fixed top-0 right-0 bg-white h-screen transition-transform duration-500 ease-out ${cx({ ' translate-x-full transform-gpu': !showPreview })} `} style={{ width: `calc((100% - 380px))`, zIndex: 200000, border: 'black solid 1px' }}>
+        {/* <div className={`fixed top-0 right-0 bg-white h-screen transition-transform duration-500 ease-out ${cx({ ' translate-x-full transform-gpu': !showPreview })} `} style={{ width: `calc((100% - 380px))`, zIndex: 200000, border: 'black solid 1px' }}>
           <div><ClosePreviewBtn onToggle={() => { setShowPreview(!showPreview) }}></ClosePreviewBtn><OpenBtn href={pageURL}></OpenBtn></div>
-          {<iframe src={pageURL} style={{}} className={'w-full h-full p-3'}></iframe>}
-        </div>
+        </div> */}
       </div>
+    </div>
+  )
+}
+
+export const Page = ({ data }) => {
+  return (
+    <div>
+      {data && <Editor enabled={false} resolver={{ ...RE }}>
+        <Frame data={data}>
+          <Element is={RE.Page} canvas></Element>
+        </Frame>
+      </Editor>}
     </div>
   )
 }

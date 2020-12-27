@@ -20,7 +20,7 @@ export const Page = ({ children }) => {
   return (<>
     {selected && <div className={'h-12'}></div>}
 
-    <DevWrap devMargin={false}>
+    <DevWrap noTool={true} devMargin={false}>
       {children}
       {/* {editable && <div className={'h-3'}></div>} */}
     </DevWrap>

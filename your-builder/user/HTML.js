@@ -6,32 +6,12 @@ import { DevWrap } from "../DevWrap";
 import { Ace, ClassNameEditor, ContentEditor } from "./ContentEditor";
 // import ContentEditable from 'react-contenteditable'
 // import sanitizeHtml from 'sanitize-content'
+// iframe.js
 
-const Division = ({ content }) => {
-  const iRef = useRef()
 
-  useEffect(() => {
-    if (iRef.current) {
-      let frame = iRef.current
-
-      var element = window.document.createElement('html');
-      element.innerHTML = content;
-
-      iRef.current.appendChild(element)
-
-      frame.style.width = '100%'
-      frame.style.height = `100%`
-    }
-
-    return () => {
-      if (iRef.current) {
-        iRef.current.innerHTML = ''
-      }
-    }
-  }, [content])
-
+const Division = ({ className, content }) => {
   return (
-    <div ref={iRef} />
+    <div className={className} dangerouslySetInnerHTML={{ __html: content }}></div>
   );
 };
 
