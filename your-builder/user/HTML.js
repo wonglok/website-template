@@ -36,13 +36,16 @@ const Division = ({ content }) => {
 };
 
 
-
 export const HTML = ({ content, className }) => {
+  let { editable } = useEditor(state => {
+    return ({
+      editable: state.options.enabled
+    })
+  })
   return (
     <DevWrap>
-      <div className={className}>
-        {content && <Division className={className} content={content}></Division> }
-      </div>
+      {editable && 'HTML Block'}
+      {!editable && content && <Division className={className} content={content}></Division> }
     </DevWrap>
   )
 }

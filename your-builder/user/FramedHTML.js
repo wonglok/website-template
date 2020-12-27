@@ -28,20 +28,22 @@ const FramedHTMLCore = ({ className, content }) => {
 };
 
 export const FramedHTML = ({ isProductionMode = false, content, className }) => {
-  // let { editable } = useEditor(state => {
-  //   return ({
-  //     editable: state.options.enabled
-  //   })
-  // })
+  let { editable } = useEditor(state => {
+    return ({
+      editable: state.options.enabled
+    })
+  })
 
   return (
     <DevWrap className={className}>
-      {content && <FramedHTMLCore content={content}></FramedHTMLCore> }
+      {editable && 'FramedHTML'}
+      {!editable && content && <FramedHTMLCore content={content}></FramedHTMLCore> }
     </DevWrap>
   )
 }
 
 const FramedHTMLSettings = () => {
+
   return (
     <>
       <ClassNameEditor></ClassNameEditor>
