@@ -498,6 +498,7 @@ export const usePage = create((set, get) => {
       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
     },
     loadPage: async ({ _id }) => {
+      set({ page: false, pageURL: 'about:blank' })
       let res = await Pages.findOneMine({ query: { _id } })
       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
       return res
