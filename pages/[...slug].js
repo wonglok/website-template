@@ -45,7 +45,7 @@ export async function getServerSideProps (context) {
     data: {
       data: {
         query: {
-          slug: 'home'
+          slug: query.slug
         }
       }
     }
