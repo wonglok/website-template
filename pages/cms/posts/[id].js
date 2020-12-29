@@ -9,6 +9,9 @@ import { TextEdit } from '../../../pages-cms-gui/TextEdit'
 export const usePost = create((set, get) => {
   return {
     post: false,
+    resetPost: () => {
+      set({ post: false })
+    },
     loadPost: async ({ _id }) => {
       let val = await Posts.findOneMine({ query: { _id } })
       set({ post: val })
@@ -74,16 +77,26 @@ export function TitleEdit () {
 export function MDEdit () {
   const post = usePost(s => s.post)
   const savePost = usePost(s => s.savePost)
+  const [saveStatus, setSaveStatus] = useState('Ready...')
 
-  // const onSubmit = () => {
-  //   savePost({ post })
-  // }
+  const onSubmit = async () => {
+    setSaveStatus('Saving...')
+    await savePost({ post })
+    setSaveStatus('Ready...')
+  }
 
+  let timer = 0
   const onUpdate = ({ text, html }) => {
     post.text = text
+    setSaveStatus(`Don't close, changes detected... Autosave in 3 seconds ....`)
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      onSubmit()
+    }, 3000)
   }
 
   return post && (<form onSubmit={(e) => { e.preventDefault(); onSubmit() }}>
+    <div className={' text-xs text-gray-600 px-3 py-3'}>{saveStatus}</div>
     {/* <MDField value={post.text || ''} onInput={v => { post.text = v; }}></MDField> */}
     <TextEdit value={post.text} onUpdate={onUpdate}></TextEdit>
     {/* <button
@@ -101,12 +114,16 @@ export function ItemEdit () {
   const router = useRouter()
   let post = usePost(s => s.post)
   let loadPost = usePost(s => s.loadPost)
+  let resetPost = usePost(s => s.resetPost)
 
   useEffect(() => {
     loadPost({ _id: router.query.id })
-  }, [JSON.stringify(post)])
+    return () => {
+      resetPost()
+    }
+  }, [router.query.id])
 
-  return (<div className={''}>
+  return (post && <div className={''}>
     <TitleEdit post={post}></TitleEdit>
     <MDEdit post={post}></MDEdit>
     {/* <pre>{JSON.stringify(post, null, '\t')}</pre> */}
