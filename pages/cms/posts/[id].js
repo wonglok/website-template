@@ -17,6 +17,7 @@ export const usePost = create((set, get) => {
   }
 
   return {
+    saveBtnStatus: 'Save',
     msg: '',
     post: false,
     dirty: false,
@@ -24,6 +25,7 @@ export const usePost = create((set, get) => {
       set({ post: false, msg: '', dirty: false })
     },
     setPost: ({ post }) => {
+      set({ saveBtnStatus: 'Need to save' })
       window.onbeforeunload = mySaveChecker
       set({ post: JSON.parse(JSON.stringify(post)), dirty: true })
     },
@@ -35,8 +37,10 @@ export const usePost = create((set, get) => {
       window.onbeforeunload = undefined
       delete window.onbeforeunload
 
+      set({ saveBtnStatus: 'Saving to cloud...' })
       await Posts.updateMine({ doc: post })
         .then((post) => {
+          set({ saveBtnStatus: 'Saved to cloud' })
           set({ post, msg: '', dirty: false })
         }, (err) => {
           if ((err + '').toLowerCase().indexOf('dup key') !== -1) {
@@ -74,6 +78,7 @@ export function MDField ({ value, onInput }) {
 }
 
 export function TitleEdit () {
+  const saveBtnStatus = usePost(s => s.saveBtnStatus)
   const msg = usePost(s => s.msg)
   const post = usePost(s => s.post)
   const savePost = usePost(s => s.savePost)
@@ -85,12 +90,12 @@ export function TitleEdit () {
   return post && (<form onSubmit={(e) => { e.preventDefault(); onSubmit() }}>
     <InputField value={post.displayName} onInput={v => { post.displayName = v; }}></InputField>
     <button
-      className={`bg-${'blue'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
+      className={`bg-${saveBtnStatus === 'Need to save' ? 'blue' : 'green'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
       type="submit"
       style={{ transition: "all .15s ease" }}
       onClick={(e) => { onSubmit() }}
     >
-      {'Update'}
+      {saveBtnStatus}
     </button>
     {msg && <div>{msg}</div>}
     <div className="flex items-center">
@@ -110,13 +115,11 @@ export function MDEdit () {
   const post = usePost(s => s.post)
   const savePost = usePost(s => s.savePost)
   const setPost = usePost(s => s.setPost)
-  const [text, setText] = useState('')
   const onSubmit = async () => {
     await savePost({ post })
   }
 
   const onUpdate = ({ text, html }) => {
-    setText(text)
     setPost({
       post: {
         ...post,
@@ -129,13 +132,7 @@ export function MDEdit () {
     let onSave = (event) => {
       if ((event.key == 's' && event.ctrlKey || event.which == 83 && event.metaKey)) {
         event.preventDefault()
-        setPost({
-          post: {
-            ...post,
-            text
-          }
-        })
-        savePost({ post })
+        savePost({ post: usePost.getState().post })
       }
     }
 
