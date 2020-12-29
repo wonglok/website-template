@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import { DeckCTA } from '../your-gui/DeckCTA'
-import { DeckMainArt } from '../your-gui/DeckMainArt'
+import { DeckCTA } from '../pages-gui/DeckCTA'
+import { DeckMainArt } from '../pages-gui/DeckMainArt'
 export default function Home() {
   return (
     <div>

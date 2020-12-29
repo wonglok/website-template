@@ -4,7 +4,7 @@ module.exports = {
   purge: [
     // './pages/**/*.js',
     // './public/**/*.js',
-    // './your-gui/**/*.js',
+    // './pages-gui/**/*.js',
     // './your-backup/**/*.js',
     // './pages-cms-gui/**/*.js'
   ],
