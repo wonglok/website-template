@@ -87,7 +87,7 @@ export function CMSLayout ({ children, isFull = false }) {
             router.push('/')
           }}
           className={"mt-8 flex items-center justify-center py-3 px-4 text-white dark:text-gray-200 bg-green-400 dark:bg-green-500 rounded-lg shadow"}>
-          <span>{'View as Public'}</span>
+          <span>{'Visit Public Site'}</span>
         </button>
 
         <ul className="mt-2 text-gray-600">

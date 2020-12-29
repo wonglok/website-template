@@ -1,6 +1,7 @@
 import axios from 'axios'
-import create from 'zustand'
-import { compress, decompress } from 'shrink-string'
+// import create from 'zustand'
+// import { compress, decompress } from 'shrink-string'
+// import { proxy, useProxy } from 'valtio'
 
 class LSStorage {
   constructor ({ AppName = 'EnjoyCreationStack', TypeName = 'JWT', onRemove = () => {} }) {
@@ -462,84 +463,50 @@ class EndPointSDK extends DocOperation {
 
 export const SDK = new SDKCore({ axios })
 
-// export const Project = new EndPointSDK({ SDK, endpoint: `/api/cms/project` })
-// export const SubCore = new EndPointSDK({ SDK, endpoint: `/api/cms/subcore` })
-// export const CodeBlock = new EndPointSDK({ SDK, endpoint: `/api/cms/codeblock` })
+export const Posts = new EndPointSDK({ SDK, endpoint: `/api/cms/posts` })
 
-// export const Pages = new EndPointSDK({ SDK, endpoint: `/api/cms/pages` })
-
-// export const usePage = create((set, get) => {
+// export const usePost = create((set, get) => {
 //   return {
-//     page: false,
-//     pageURL: 'about:blank',
+//     post: false,
 
-//     savePageName: async ({ _id, displayName, data }) => {
-//       let res = await Pages.updateMine({
-//         doc: {
-//           _id,
-//           data,
-//           displayName
+//     savePost: async ({ patch = {} }) => {
+//       let post = JSON.parse(JSON.stringify(get().post))
+//       if (!post) {
+//         return
+//       }
+
+//       for (let key in patch) {
+//         if (key) {
+//           post[key] = patch[key]
 //         }
+//       }
+
+//       let res = await Posts.updateMine({
+//         doc: post
 //       })
-//       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+
+//       set({ post: res })
 //     },
-//     savePage: async ({ _id, data }) => {
-//       let res = await Pages.updateMine({
-//         doc: {
-//           _id,
-//           data
-//         }
-//       })
-//       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+
+//     clearPost: async () => {
+//       set({ post: false })
 //     },
-//     syncPage: async ({ data }) => {
-//       let res = JSON.parse(JSON.stringify(get().page))
-//       res.data = data
-//       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+
+//     setPost: async ({ key, value }) => {
+//       let post = get().post
+//       if (post) {
+//         post[key] = value
+//         set({ post })
+//       }
 //     },
-//     loadPage: async ({ _id }) => {
-//       set({ page: false, pageURL: 'about:blank' })
-//       let res = await Pages.findOneMine({ query: { _id } })
-//       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
-//       return res
+
+//     loadPost: async ({ _id }) => {
+//       let post = await Posts.findOneMine({ query: { _id } })
+//       set({ post })
+//       return post
 //     }
 //   }
 // })
-
-
-export const Posts = new EndPointSDK({ SDK, endpoint: `/api/cms/posts` })
-
-export const usePosts = create((set, get) => {
-  return {
-    post: false,
-
-    savePostName: async ({ _id, displayName, data }) => {
-      let res = await Posts.updateMine({
-        doc: {
-          _id,
-          data,
-          displayName
-        }
-      })
-      set({ post: res })
-    },
-    savePost: async ({ _id, data }) => {
-      let res = await Posts.updateMine({
-        doc: {
-          _id,
-          data
-        }
-      })
-      set({ post: res })
-    },
-    loadPost: async ({ _id }) => {
-      set({ post: false, postURL: 'about:blank' })
-      let res = await Posts.findOneMine({ query: { _id } })
-      set({ post: res })
-      return res
-    }
-  }
-})
 
 
 // export const runTestProject = async () => {

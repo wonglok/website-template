@@ -1,10 +1,131 @@
 import { useEffect, useState, useRef, useMemo, Suspense } from 'react'
 import { CMSLayout } from "../../../pages-cms-gui/CMSLayout"
-import { SDK, usePage } from "../../../pages-cms-gui/api"
+import { SDK, Posts } from "../../../pages-cms-gui/api"
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import create from 'zustand'
+import { TextEdit } from '../../../pages-cms-gui/TextEdit'
 
-export function AdminArea ({ children }) {
+export const usePost = create((set, get) => {
+  return {
+    post: false,
+    loadPost: async ({ _id }) => {
+      let val = await Posts.findOneMine({ query: { _id } })
+      set({ post: val })
+    },
+    savePost: async ({ post }) => {
+      let val = await Posts.updateMine({ doc: post })
+      set({ post: val })
+    }
+  }
+})
+
+export function InputField ({ value, onInput }) {
+  const [input, syncInput] = useState(value)
+
+  useEffect(() => {
+    syncInput(value)
+  }, [value])
+
+  return <input type="text" value={input} onInput={e => {
+    syncInput(e.target.value)
+    onInput(e.target.value)
+  }} className="p-1 px-2 m-1 bg-white"></input>
+}
+
+export function MDField ({ value, onInput }) {
+  const [input, syncInput] = useState(value)
+
+  useEffect(() => {
+    syncInput(value)
+  }, [value])
+
+  return <textarea type="text" value={input} onInput={e => {
+    syncInput(e.target.value)
+    onInput(e.target.value)
+  }} className="p-1 px-2 m-1 bg-white"></textarea>
+}
+
+export function TitleEdit () {
+  const post = usePost(s => s.post)
+  const savePost = usePost(s => s.savePost)
+
+  const onSubmit = () => {
+    savePost({ post })
+  }
+
+  return post && (<form onSubmit={(e) => { e.preventDefault(); onSubmit() }}>
+    <InputField value={post.displayName} onInput={v => { post.displayName = v; }}></InputField>
+    <button
+      className={`bg-${'blue'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
+      type="submit"
+      style={{ transition: "all .15s ease" }}
+      onClick={(e) => { onSubmit() }}
+    >
+      {'Update'}
+    </button>
+    <div className="flex items-center">
+      <div className="inline-block p-1 px-2 m-1 bg-white opacity-30">URL: <a target={`_${post._id}`} href={`${location.origin}/posts/${post.slug}`}>{location.origin}/posts/{post.slug}</a></div>
+    </div>
+  </form>)
+}
+
+
+export function MDEdit () {
+  const post = usePost(s => s.post)
+  const savePost = usePost(s => s.savePost)
+
+  // const onSubmit = () => {
+  //   savePost({ post })
+  // }
+
+  const onUpdate = ({ text, html }) => {
+    post.text = text
+  }
+
+  return post && (<form onSubmit={(e) => { e.preventDefault(); onSubmit() }}>
+    {/* <MDField value={post.text || ''} onInput={v => { post.text = v; }}></MDField> */}
+    <TextEdit value={post.text} onUpdate={onUpdate}></TextEdit>
+    {/* <button
+      className={`bg-${'blue'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
+      type="submit"
+      style={{ transition: "all .15s ease" }}
+      onClick={(e) => { onSubmit() }}
+    >
+      {'Update'}
+    </button> */}
+  </form>)
+}
+
+export function ItemEdit () {
+  const router = useRouter()
+  let post = usePost(s => s.post)
+  let loadPost = usePost(s => s.loadPost)
+
+  useEffect(() => {
+    loadPost({ _id: router.query.id })
+  }, [JSON.stringify(post)])
+
+  return (<div className={''}>
+    <TitleEdit post={post}></TitleEdit>
+    <MDEdit post={post}></MDEdit>
+    {/* <pre>{JSON.stringify(post, null, '\t')}</pre> */}
+  </div>)
+}
+
+export function CMSApp () {
+  return (
+    <div>
+      <CMSLayout>
+        <AdminArea>
+          {<ItemEdit></ItemEdit>}
+        </AdminArea>
+      </CMSLayout>
+    </div>
+  )
+}
+
+export function AdminArea ({ children = <div></div> }) {
   const [canShow, setCanShow] = useState('wait')
   useMemo(async () => {
     try {
@@ -37,21 +158,6 @@ export function AdminArea ({ children }) {
   return result()
 }
 
-
-export function CMSApp () {
-  const router = useRouter()
-  return (
-    <div>
-      <CMSLayout>
-        <AdminArea>
-          <div>
-            {router.query.id}
-          </div>
-        </AdminArea>
-      </CMSLayout>
-    </div>
-  )
-}
 
 export default function PageEditorLanding () {
   const router = useRouter()
