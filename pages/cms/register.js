@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { SDK } from '../../your-cms/api'
+import { SDK } from '../../pages-cms-gui/api'
 
 export function RegisterSection () {
   const router = useRouter()

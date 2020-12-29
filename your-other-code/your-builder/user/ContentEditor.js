@@ -1,7 +1,7 @@
 import { useNode, useEditor } from '@craftjs/core';
 import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
-import { usePage } from '../../your-cms/api';
+import { usePage } from '../../pages-cms-gui/api';
 
 export const Ace = ({ mode = 'html', value = '', onSave = () => {}, onChange = () => {} }) => {
   let ref = useRef()

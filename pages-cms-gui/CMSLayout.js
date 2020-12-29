@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { SDK } from '../your-cms/api'
+import { SDK } from '../pages-cms-gui/api'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 export function useUserInfo () {
@@ -110,7 +110,7 @@ export function CMSLayout ({ children, isFull = false }) {
               </span>
             </li>
           </MyLink>
-
+{/*
           <MyLink href="/cms/pages">
             <li
               className="mt-4">
@@ -127,9 +127,27 @@ export function CMSLayout ({ children, isFull = false }) {
                 <span className="ml-2 capitalize font-medium">Pages</span>
               </span>
             </li>
+          </MyLink> */}
+
+          <MyLink href="/cms/posts">
+            <li
+              className="mt-4">
+              <span href="#home" className="flex pl-4">
+                <svg
+                  className="fill-current h-5 w-5 dark:text-gray-300"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6
+                    4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6
+                    4h4v-4h-4M4 8h4V4H4v4z"></path>
+                </svg>
+
+                <span className="ml-2 capitalize font-medium">Posts</span>
+              </span>
+            </li>
           </MyLink>
 
-        <MyLink href="/cms/users">
+          <MyLink href="/cms/users">
             <li
               className="mt-4
               ">
@@ -144,7 +162,6 @@ export function CMSLayout ({ children, isFull = false }) {
               </span>
             </li>
           </MyLink>
-
 
         </ul>
 

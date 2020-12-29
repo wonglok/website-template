@@ -466,45 +466,81 @@ export const SDK = new SDKCore({ axios })
 // export const SubCore = new EndPointSDK({ SDK, endpoint: `/api/cms/subcore` })
 // export const CodeBlock = new EndPointSDK({ SDK, endpoint: `/api/cms/codeblock` })
 
-export const Pages = new EndPointSDK({ SDK, endpoint: `/api/cms/pages` })
+// export const Pages = new EndPointSDK({ SDK, endpoint: `/api/cms/pages` })
 
-export const usePage = create((set, get) => {
+// export const usePage = create((set, get) => {
+//   return {
+//     page: false,
+//     pageURL: 'about:blank',
+
+//     savePageName: async ({ _id, displayName, data }) => {
+//       let res = await Pages.updateMine({
+//         doc: {
+//           _id,
+//           data,
+//           displayName
+//         }
+//       })
+//       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+//     },
+//     savePage: async ({ _id, data }) => {
+//       let res = await Pages.updateMine({
+//         doc: {
+//           _id,
+//           data
+//         }
+//       })
+//       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+//     },
+//     syncPage: async ({ data }) => {
+//       let res = JSON.parse(JSON.stringify(get().page))
+//       res.data = data
+//       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+//     },
+//     loadPage: async ({ _id }) => {
+//       set({ page: false, pageURL: 'about:blank' })
+//       let res = await Pages.findOneMine({ query: { _id } })
+//       set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+//       return res
+//     }
+//   }
+// })
+
+
+export const Posts = new EndPointSDK({ SDK, endpoint: `/api/cms/posts` })
+
+export const usePosts = create((set, get) => {
   return {
-    page: false,
-    pageURL: 'about:blank',
+    post: false,
 
-    savePageName: async ({ _id, displayName, data }) => {
-      let res = await Pages.updateMine({
+    savePostName: async ({ _id, displayName, data }) => {
+      let res = await Posts.updateMine({
         doc: {
           _id,
           data,
           displayName
         }
       })
-      set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+      set({ post: res })
     },
-    savePage: async ({ _id, data }) => {
-      let res = await Pages.updateMine({
+    savePost: async ({ _id, data }) => {
+      let res = await Posts.updateMine({
         doc: {
           _id,
           data
         }
       })
-      set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+      set({ post: res })
     },
-    syncPage: async ({ data }) => {
-      let res = JSON.parse(JSON.stringify(get().page))
-      res.data = data
-      set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
-    },
-    loadPage: async ({ _id }) => {
-      set({ page: false, pageURL: 'about:blank' })
-      let res = await Pages.findOneMine({ query: { _id } })
-      set({ page: res, pageURL: `/${res.slug}?r=${Math.random()}` })
+    loadPost: async ({ _id }) => {
+      set({ post: false, postURL: 'about:blank' })
+      let res = await Posts.findOneMine({ query: { _id } })
+      set({ post: res })
       return res
     }
   }
 })
+
 
 // export const runTestProject = async () => {
 //   if (process.env.NODE_ENV === 'development') {

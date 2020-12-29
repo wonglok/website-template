@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { SDK } from '../../your-cms/api'
-import { Cloudinary } from '../../your-cms/Cloudinary'
+import { SDK } from '../../pages-cms-gui/api'
+import { Cloudinary } from '../../pages-cms-gui/Cloudinary'
 import Head from 'next/head'
 import Link from 'next/link'
 

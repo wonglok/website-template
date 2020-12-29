@@ -1,7 +1,8 @@
 const slugify = require('slugify')
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
 mongoose.set('useCreateIndex', true);
-let DBNAME = `developerblog`
+let DBNAME = `db86deck`
 let KADB = process.env.MONGO_URL || `mongodb://localhost:27017/${DBNAME}?readPreference=primary&appname=MongoDB%20Compass&ssl=false`
 mongoose.connect(KADB, { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -66,26 +67,27 @@ module.exports.User = mongoose.models.User || mongoose.model('User', SchemaExpor
 
 // module.exports.Posts = mongoose.models.Posts || mongoose.model('Posts', SchemaExport.Posts);
 
-//-----------------------
+// //-----------------------
 
-SchemaExport.Pages = new Schema({
+SchemaExport.Posts = new Schema({
+  featured: {
+    type: Boolean,
+    default: false
+  },
+
   userID: {
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  type: {
-    type: String,
-    default: 'Page',
-  },
 
-  // Page, Profile
   displayName: String,
+  title: String,
+  text: String,
   slug: {
     type: String,
     unique: true,
     index: true
   },
-  data: {}
 }, {
   timestamps: {
     createdAt: 'created_at',
@@ -93,7 +95,36 @@ SchemaExport.Pages = new Schema({
   }
 })
 
-module.exports.Pages = mongoose.models.Pages || mongoose.model('Pages', SchemaExport.Pages);
+module.exports.Posts = mongoose.models.Posts || mongoose.model('Posts', SchemaExport.Posts);
+
+//-----------------------
+
+// SchemaExport.Pages = new Schema({
+//   userID: {
+//     type: Schema.Types.ObjectId,
+//     ref: 'User',
+//   },
+//   type: {
+//     type: String,
+//     default: 'Page',
+//   },
+
+//   // Page, Profile
+//   displayName: String,
+//   slug: {
+//     type: String,
+//     unique: true,
+//     index: true
+//   },
+//   data: {}
+// }, {
+//   timestamps: {
+//     createdAt: 'created_at',
+//     updatedAt: 'updated_at'
+//   }
+// })
+
+// module.exports.Pages = mongoose.models.Pages || mongoose.model('Pages', SchemaExport.Pages);
 
 //---------
 
@@ -122,6 +153,7 @@ module.exports.DocOperation = class DocOperation {
     } catch (e) {
       console.log(e)
       this.res.status(500).json({
+        isError: true,
         msg: e.message || 'error'
       })
     }
@@ -286,7 +318,7 @@ module.exports.DocOperation = class DocOperation {
     this.tryRun(async () => {
       let user = await this.checkOwner()
 
-      let result = await this.DocClass.findOneAndDelete({ userID: user._id, _id: this.req.body.data._id })
+      let result = await this.DocClass.findOneAndDelete({ userID: user._id, _id: ObjectId(this.req.body.data._id) })
 
       if (result === null) {
         this.res.status(404).json({

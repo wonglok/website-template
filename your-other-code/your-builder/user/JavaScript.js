@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react"
 import { useNode, useEditor } from "@craftjs/core"
 import { useRouter } from 'next/router'
-import { usePage } from "../../your-cms/api"
+import { usePage } from "../../pages-cms-gui/api"
 import { DevWrap } from "../DevWrap";
 import { ContentEditor } from "./ContentEditor";
 // import ContentEditable from 'react-contenteditable'

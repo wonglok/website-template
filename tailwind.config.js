@@ -6,7 +6,7 @@ module.exports = {
     // './public/**/*.js',
     // './your-gui/**/*.js',
     // './your-backup/**/*.js',
-    // './your-cms/**/*.js'
+    // './pages-cms-gui/**/*.js'
   ],
   presets: [],
   darkMode: false, // or 'media' or 'class'

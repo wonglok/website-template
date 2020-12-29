@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo, Suspense } from 'react'
-import { CMSLayout } from "../../../your-cms/CMSLayout"
-import { SDK, usePage } from "../../../your-cms/api"
+import { CMSLayout } from "../../../pages-cms-gui/CMSLayout"
+import { SDK, usePage } from "../../../pages-cms-gui/api"
 import { useRouter } from 'next/router'
 import { PageEditor } from "../../../your-builder/PageEditor"
 import Head from 'next/head'

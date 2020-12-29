@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { MyMetaTags } from '../your-cms/pager'
+import { MyMetaTags } from '../pages-cms-gui/pager'
 import { Editor, Frame, Element } from "@craftjs/core"
-import { Pages, usePage } from '../your-cms/api'
+import { Pages, usePage } from '../pages-cms-gui/api'
 import { useEffect } from 'react'
 import * as RE from '../your-builder/user'
 import { decompress } from 'shrink-string'
@@ -11,24 +11,7 @@ import ReactDOMServer from 'react-dom/server'
 
 // This gets called on every request
 export async function getServerSideProps (context) {
-  let { req, params, query } = context
-  let domain = req.headers.host || 'test.com'
-  let url = `http://${domain}${req.url}`
-  let matcher = new URL(url)
-
-  let srv = {
-    params,
-    query,
-    urlL: req.url,
-    href: matcher.href,
-    origin: matcher.origin,
-    host: matcher.host,
-    hostname: matcher.hostname,
-    port: matcher.port,
-    pathname: matcher.pathname,
-    search: matcher.search,
-    hash: matcher.hash
-  }
+  let { req } = context
 
   let endpoint = '/api/cms/pages'
   let action = 'find-one-public'
@@ -45,7 +28,7 @@ export async function getServerSideProps (context) {
     data: {
       data: {
         query: {
-          slug: query.slug
+          slug: 'home'
         }
       }
     }
@@ -55,7 +38,14 @@ export async function getServerSideProps (context) {
     return false
   })
 
-  srv.page = page
+  let srv = {
+    page,
+    params: {
+      slug: ['/']
+    },
+    query: {},
+    url: req.url
+  }
 
   return { props: { srv } }
 }
@@ -104,22 +94,3 @@ export default function Home ({ srv }) {
     </div>
   )
 }
-
-// export default function Home ({ srv }) {
-//   const router = useRouter()
-
-//   return (
-//     <div>
-//       <Head>
-//         <MyMetaTags
-//           title={'My Title'}
-//           desc={'Descrition'}
-//           url={srv.url}
-//           image={false}
-//           largerImage={false}
-//         ></MyMetaTags>
-//       </Head>
-
-//     </div>
-//   )
-// }

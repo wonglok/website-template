@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react'
 import React from "react";
 import { Editor, Frame, Element, useEditor, useNode } from "@craftjs/core"
-import { Pages, usePage } from '../your-cms/api';
+import { Pages, usePage } from '../pages-cms-gui/api';
 import { useRouter } from 'next/router'
 import * as RE from '../your-builder/user'
 import Sticky from 'react-stickynode'
@@ -230,7 +230,7 @@ export const EditorBody = ({ children, page }) => {
 
             <div className={'flex justify-between'}>
               <div className="w-1/3">{children}</div>
-              <div className="w-2/3">{<iframe src={pageURL} style={{ }} height={window.innerHeight} className={'w-full border border-gray-600'}></iframe>}</div>
+              <div className="w-2/3 h-screen">{<iframe src={pageURL} style={{ }} className={'w-full h-full border border-gray-600'}></iframe>}</div>
             </div>
           </div>
         </div>

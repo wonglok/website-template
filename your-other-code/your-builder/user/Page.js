@@ -10,16 +10,14 @@ export const Page = ({ children }) => {
     })
   })
 
-  let { selected } = useNode((state) => {
-    return {
-      selected: state.events.selected
-    }
-  })
+  // let { selected } = useNode((state) => {
+  //   return {
+  //     selected: state.events.selected
+  //   }
+  // })
 
   const { connectors: { connect, drag } } = useNode();
   return (<>
-    {selected && <div className={'h-12'}></div>}
-
     <DevWrap noTool={true} devMargin={false}>
       {children}
       {/* {editable && <div className={'h-3'}></div>} */}

@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import { SDK } from '../../your-cms/api'
-import { CMSLayout } from '../../your-cms/CMSLayout'
-import { Modal } from '../../your-cms/Modal'
+import { SDK } from '../../pages-cms-gui/api'
+import { CMSLayout } from '../../pages-cms-gui/CMSLayout'
+import { Modal } from '../../pages-cms-gui/Modal'
 import useSWR from 'swr'
 
 let HeaderRow = () => {

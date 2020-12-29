@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { SDK } from '../../your-cms/api'
-import { CMSLayout } from '../../your-cms/CMSLayout'
+import { SDK } from '../../pages-cms-gui/api'
+import { CMSLayout } from '../../pages-cms-gui/CMSLayout'
 
 export function CMSApp () {
   const router = useRouter()

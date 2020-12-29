@@ -1,29 +1,32 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { SDK, Pages } from '../../../your-cms/api'
-import { CMSLayout } from '../../../your-cms/CMSLayout'
+import { SDK, Posts } from '../../../pages-cms-gui/api'
+import { CMSLayout } from '../../../pages-cms-gui/CMSLayout'
 import useSWR from 'swr'
 
 function PageActions ({ row, reload }) {
   const router = useRouter()
   return <div className="flex items-center">
+
     <button
       className={`bg-${'green'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
       type="button"
       style={{ transition: "all .15s ease" }}
-      onClick={() => { router.push('/cms/pages/' + row._id) }}
+      onClick={() => { router.push('/cms/posts/' + row._id) }}
     >
       {'Edit'}
     </button>
+
     <button
       className={`bg-${'red'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
       type="button"
       style={{ transition: "all .15s ease" }}
-      onClick={() => { Pages.deleteMine({ doc: row }).then(reload) }}
+      onClick={() => { Posts.deleteMine({ doc: row }).then(reload) }}
     >
       {'Delete'}
     </button>
+
   </div>
 }
 
@@ -59,7 +62,7 @@ function PageDataRows ({ data, reload }) {
 }
 
 function DataTablePost ({  }) {
-  let { revalidate, data, err } = useSWR('listMine', key => Pages[key]({  }))
+  let { revalidate, data, err } = useSWR('listMine', key => Posts[key]({  }))
   data = data || []
   data = data.map(e => {
     return {
@@ -72,7 +75,7 @@ function DataTablePost ({  }) {
     return <div>
       <PageCreator reload={revalidate}></PageCreator>
       <div className="text-sm text-gray-700">
-        You dont have pages yet, let's Create a new Page.
+        You dont have pages yet, let's Create a new One.
       </div>
     </div>
   }
@@ -187,19 +190,19 @@ function PageCreator ({ reload }) {
     let doc = {
       displayName
     }
-    await Pages.create({ doc })
+    await Posts.create({ doc })
     reload()
   }
   return <>
-  <input type="text" value={displayName} onInput={e => setDisplayName(e.target.value)} className="p-1 px-2 m-1 bg-white"></input>
-  <button
-    className={`bg-${'blue'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
-    type="button"
-    style={{ transition: "all .15s ease" }}
-    onClick={onCreatePage}
-  >
-    {'Create a New Page'}
-  </button>
+    <input type="text" value={displayName} onInput={e => setDisplayName(e.target.value)} className="p-1 px-2 m-1 bg-white"></input>
+    <button
+      className={`bg-${'blue'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
+      type="button"
+      style={{ transition: "all .15s ease" }}
+      onClick={onCreatePage}
+    >
+      {'Create a New One'}
+    </button>
   </>
 }
 
@@ -209,7 +212,7 @@ export function CMSApp () {
     <div>
       <CMSLayout>
         <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
-          Pages
+          Posts
         </h2>
         <div>
           <DataTablePost></DataTablePost>
