@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { TextDisplay } from '../../pages-cms-gui/TextEdit'
+import css from '../../pages-cms-gui/mardown.module.css'
+
 export async function getServerSideProps (context) {
   let baseURL = 'https://website-template-tau.vercel.app'
   if (process.env.NODE_ENV === 'development') {
@@ -42,7 +44,6 @@ export async function getServerSideProps (context) {
 }
 
 export default function MyPosts ({ error, data }) {
-
   if (error && error.isError) {
     return <div className="full">
       <style>{/* css */`
@@ -54,7 +55,7 @@ export default function MyPosts ({ error, data }) {
       <div className="flex items-center justify-center h-full">Item Not Found</div>
     </div>
   }
-  return <div>
+  return <div >
     <TextDisplay text={data.text}></TextDisplay>
     {/* <pre className=" whitespace-pre ">{JSON.stringify(data, null, '\t')}</pre> */}
   </div>

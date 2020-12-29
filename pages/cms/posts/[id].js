@@ -7,18 +7,42 @@ import create from 'zustand'
 import { TextEdit } from '../../../pages-cms-gui/TextEdit'
 
 export const usePost = create((set, get) => {
+  function mySaveChecker (e) {
+    // Cancel the event
+    e.preventDefault() // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+    // Chrome requires returnValue to be set
+    e.returnValue = ''
+
+    return 'Needs save file'
+  }
+
   return {
+    msg: '',
     post: false,
+    dirty: false,
     resetPost: () => {
-      set({ post: false })
+      set({ post: false, msg: '', dirty: false })
+    },
+    setPost: ({ post }) => {
+      window.onbeforeunload = mySaveChecker
+      set({ post: JSON.parse(JSON.stringify(post)), dirty: true })
     },
     loadPost: async ({ _id }) => {
       let val = await Posts.findOneMine({ query: { _id } })
-      set({ post: val })
+      set({ post: val, msg: '', dirty: false })
     },
     savePost: async ({ post }) => {
-      let val = await Posts.updateMine({ doc: post })
-      set({ post: val })
+      window.onbeforeunload = undefined
+      delete window.onbeforeunload
+
+      await Posts.updateMine({ doc: post })
+        .then((post) => {
+          set({ post, msg: '', dirty: false })
+        }, (err) => {
+          if ((err + '').toLowerCase().indexOf('dup key') !== -1) {
+            set({ msg: 'url is taken' })
+          }
+        })
     }
   }
 })
@@ -50,6 +74,7 @@ export function MDField ({ value, onInput }) {
 }
 
 export function TitleEdit () {
+  const msg = usePost(s => s.msg)
   const post = usePost(s => s.post)
   const savePost = usePost(s => s.savePost)
 
@@ -67,36 +92,55 @@ export function TitleEdit () {
     >
       {'Update'}
     </button>
+    {msg && <div>{msg}</div>}
     <div className="flex items-center">
       <div className="inline-block p-1 px-2 m-1 bg-white opacity-30">URL: <a target={`_${post._id}`} href={`${location.origin}/posts/${post.slug}`}>{location.origin}/posts/{post.slug}</a></div>
     </div>
   </form>)
 }
 
-
 export function MDEdit () {
   const post = usePost(s => s.post)
   const savePost = usePost(s => s.savePost)
-  const [saveStatus, setSaveStatus] = useState('Ready...')
-
+  const setPost = usePost(s => s.setPost)
+  const [text, setText] = useState('')
   const onSubmit = async () => {
-    setSaveStatus('Saving...')
     await savePost({ post })
-    setSaveStatus('Ready...')
   }
 
-  let timer = 0
   const onUpdate = ({ text, html }) => {
-    post.text = text
-    setSaveStatus(`Don't close, changes detected... Autosave in 3 seconds ....`)
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      onSubmit()
-    }, 3000)
+    setText(text)
+    setPost({
+      post: {
+        ...post,
+        text
+      }
+    })
   }
+
+  useEffect(() => {
+    let onSave = (event) => {
+      if ((event.key == 's' && event.ctrlKey || event.which == 83 && event.metaKey)) {
+        event.preventDefault()
+        setPost({
+          post: {
+            ...post,
+            text
+          }
+        })
+        savePost({ post })
+      }
+    }
+
+    window.addEventListener('keydown', onSave, false)
+    return () => {
+      window.removeEventListener('keydown', onSave, false)
+    }
+  }, [])
 
   return post && (<form onSubmit={(e) => { e.preventDefault(); onSubmit() }}>
-    <div className={' text-xs text-gray-600 px-3 py-3'}>{saveStatus}</div>
+    {/* <div className={' text-xs text-gray-600 px-3 py-3'}>{saveStatus}</div> */}
+    <div className={' text-xs text-gray-600 px-3 py-3'}>CTRL + S (PC), CMD + S (mac) to Save</div>
     {/* <MDField value={post.text || ''} onInput={v => { post.text = v; }}></MDField> */}
     <TextEdit value={post.text} onUpdate={onUpdate}></TextEdit>
     {/* <button
@@ -117,11 +161,18 @@ export function ItemEdit () {
   let resetPost = usePost(s => s.resetPost)
 
   useEffect(() => {
-    loadPost({ _id: router.query.id })
+    resetPost()
     return () => {
       resetPost()
     }
-  }, [router.query.id])
+  }, [])
+  useEffect(() => {
+    loadPost({ _id: router.query.id })
+    return () => {
+    }
+  }, [])
+
+
 
   return (post && <div className={''}>
     <TitleEdit post={post}></TitleEdit>

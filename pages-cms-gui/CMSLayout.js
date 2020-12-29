@@ -30,6 +30,8 @@ export function MyLink ({ children, href }) {
   return <Link href={href}>{React.cloneElement(children, { className })}</Link>
 }
 
+// className={`${css.markdown_my_version} ${css.highlight}`}
+
 export function CMSLayout ({ children, isFull = false }) {
   const [user] = useUserInfo()
   const router = useRouter()
