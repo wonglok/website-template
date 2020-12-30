@@ -3,18 +3,24 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { SDK } from '../../pages-cms-gui/api'
 import { CMSLayout } from '../../pages-cms-gui/CMSLayout'
+import { ChurchCanvas } from '../../your-3d/church/ChurchCanvas'
 import { FighterCanvas } from '../../your-3d/character/FighterCanvas'
 
 export function CMSApp () {
-  const router = useRouter()
+  // const router = useRouter()
   return (
     <div>
       <CMSLayout>
         <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
           Welcome to CMS
         </h2>
-        <div className={''} style={{ height: 'calc(80vh)' }}>
-          <FighterCanvas></FighterCanvas>
+        <div className="flex">
+          <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ height: '400px' }}>
+            <ChurchCanvas></ChurchCanvas>
+          </div>
+          <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ height: '400px' }}>
+            <FighterCanvas></FighterCanvas>
+          </div>
         </div>
       </CMSLayout>
     </div>

@@ -43,7 +43,7 @@ function MyScene () {
     controls.current.enablePan = true
     controls.current.enableRotate = false
 
-    controls.current.panSpeed = 1024 / window.innerHeight * panSpeed
+    controls.current.panSpeed = 1024 / gl.domElement.height * panSpeed
     controls.current.enableDamping = true
     controls.current.enableZoom = false
     controls.current.screenSpacePanning = false
@@ -59,13 +59,13 @@ function MyScene () {
 
     camera.near = 0.1
     camera.far = 10000
-    camera.aspect = window.innerWidth / window.innerHeight
+    camera.aspect = gl.domElement.width / gl.domElement.height
     camera.updateProjectionMatrix()
 
     let onResize = () => {
-      controls.current.panSpeed = 1024 / window.innerHeight * panSpeed
+      controls.current.panSpeed = 1024 / gl.domElement.height * panSpeed
 
-      camera.aspect = window.innerWidth / window.innerHeight
+      camera.aspect = gl.domElement.width / gl.domElement.height
       camera.updateProjectionMatrix()
     }
     window.addEventListener('resize', onResize)
@@ -125,14 +125,14 @@ function MyScene () {
 
 export function ChurchCanvas () {
   const mouse = useRef({ x: 0, y: 0 })
-
-  useEffect(() => {
-    mouse.current.x = window.innerWidth / 2
-    mouse.current.y = window.innerHeight / 2
-  })
+  // useEffect(() => {
+  //   mouse.current.x = gl.domElement.width / 2
+  //   mouse.current.y = gl.domElement.height / 2
+  // }, [])
 
   return (
     <Canvas
+
       shadowMap
       pixelRatio={[1.2, 2.0]}
       // onPointerMove={(e) => ( mouse.current = getMousePos(e)) }}
@@ -142,6 +142,9 @@ export function ChurchCanvas () {
       onCreated={({ gl }) => {
         gl.toneMapping = ACESFilmicToneMapping
         gl.outputEncoding = sRGBEncoding
+
+        mouse.current.x = gl.domElement.width / 2
+        mouse.current.y = gl.domElement.height / 2
       }}
     >
 

@@ -54,10 +54,10 @@ function ShadowReceivePlane({ map, ...props }) {
 //   })
 //   useEffect(() => {
 //     ref.current.near = 0.01
-//     ref.current.aspect = window.innerWidth / window.innerHeight
+//     ref.current.aspect = gl.domElement.width / gl.domElement.height
 //     ref.current.updateProjectionMatrix()
 //     window.addEventListener('resize', () => {
-//       ref.current.aspect = window.innerWidth / window.innerHeight
+//       ref.current.aspect = gl.domElement.width / gl.domElement.height
 //       ref.current.updateProjectionMatrix()
 //     })
 //   })
@@ -80,6 +80,11 @@ export function MyScene ({ mouse, ...props }) {
   const bus = useMemo(() => new EventEmitter())
   const d = 15
 
+  useEffect(() => {
+    mouse.current.x = gl.domElement.width / 2
+    mouse.current.y = gl.domElement.height / 2
+  })
+
   const [charPos] = useState([0 * 6.4, -10, 0])
 
   useEffect(() => {
@@ -88,7 +93,7 @@ export function MyScene ({ mouse, ...props }) {
     camera.position.z = 30
     camera.near = 0.01
     camera.far = 10000
-    camera.aspect = window.innerWidth / window.innerHeight
+    camera.aspect = gl.domElement.width / gl.domElement.height
     camera.updateProjectionMatrix()
 
     controls.current = new OrbitControls(camera, gl.domElement)
@@ -98,7 +103,7 @@ export function MyScene ({ mouse, ...props }) {
     // controls.current.enablePan = true
     // controls.current.enableRotate = false
 
-    // controls.current.panSpeed = 1024 / window.innerHeight * panSpeed
+    // controls.current.panSpeed = 1024 / gl.domElement.height * panSpeed
     controls.current.enableDamping = true
     // controls.current.enableZoom = false
     // controls.current.screenSpacePanning = false
@@ -208,10 +213,6 @@ let css = v => v[0]
 export function FighterCanvas () {
   const mouse = useRef({ x: 0, y: 0 })
 
-  useEffect(() => {
-    mouse.current.x = window.innerWidth / 2
-    mouse.current.y = window.innerHeight / 2
-  })
 
   return (
     <>
