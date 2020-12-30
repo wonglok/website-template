@@ -193,6 +193,11 @@ function PageCreator ({ reload }) {
     await Posts.create({ doc })
     reload()
   }
+
+  //
+  // https://via.placeholder.com/350x150
+  //
+
   return <>
     <input type="text" value={displayName} onInput={e => setDisplayName(e.target.value)} className="p-1 px-2 m-1 bg-white"></input>
     <button

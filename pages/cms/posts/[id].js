@@ -142,20 +142,10 @@ export function MDEdit () {
     }
   }, [])
 
-  return post && (<form onSubmit={(e) => { e.preventDefault(); onSubmit() }}>
-    {/* <div className={' text-xs text-gray-600 px-3 py-3'}>{saveStatus}</div> */}
+  return post && (<div>
     <div className={' text-xs text-gray-600 px-3 py-3'}>CTRL + S (PC), CMD + S (mac) to Save</div>
-    {/* <MDField value={post.text || ''} onInput={v => { post.text = v; }}></MDField> */}
     <TextEdit value={post.text} onUpdate={onUpdate}></TextEdit>
-    {/* <button
-      className={`bg-${'blue'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
-      type="submit"
-      style={{ transition: "all .15s ease" }}
-      onClick={(e) => { onSubmit() }}
-    >
-      {'Update'}
-    </button> */}
-  </form>)
+  </div>)
 }
 
 export function ItemEdit () {

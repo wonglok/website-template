@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function Modal ({ color = 'green', bus, onCancel, onOK, btn = 'Open Modal', title = 'modal title', children }) {
+export function Modal ({ showButton = true, footer = false, onReady = () => {}, color = 'green', onCancel, onOK = () => {}, btn = 'Open Modal', title = 'modal title', children }) {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -15,6 +15,11 @@ export function Modal ({ color = 'green', bus, onCancel, onOK, btn = 'Open Modal
         }
       }
     }
+
+    onReady({
+      toggle: setShowModal
+    })
+
     window.addEventListener('keydown', onKeyDown)
     return () => {
       window.removeEventListener('keydown', onKeyDown)
@@ -22,14 +27,14 @@ export function Modal ({ color = 'green', bus, onCancel, onOK, btn = 'Open Modal
   })
   return (
     <>
-      <button
+      {showButton && <button
         className={`bg-${color}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
         type="button"
         style={{ transition: "all .15s ease" }}
         onClick={() => setShowModal(true)}
       >
         {btn}
-      </button>
+      </button>}
       {showModal ? (
         <>
           <div
@@ -61,15 +66,16 @@ export function Modal ({ color = 'green', bus, onCancel, onOK, btn = 'Open Modal
                   </div>
                 </div>
 
-                {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">
+                {/* footer */}
+
+                {footer && <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">
                   <button
                     className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                     type="button"
                     style={{ transition: "all .15s ease" }}
                     onClick={() => { onCancel(); setShowModal(false); }}
                   >
-                    Close
+                    Cancel
                   </button>
                   <button
                     className="bg-green-500 text-white active:bg-green-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
@@ -77,9 +83,9 @@ export function Modal ({ color = 'green', bus, onCancel, onOK, btn = 'Open Modal
                     style={{ transition: "all .15s ease" }}
                     onClick={async () => { await onOK(); setShowModal(false);  }}
                   >
-                    Save Changes
+                    OK
                   </button>
-                </div>
+                </div>}
               </div>
             </div>
           </div>
