@@ -112,6 +112,24 @@ export function CMSLayout ({ children, isFull = false }) {
               </span>
             </li>
           </MyLink>
+
+          <MyLink href="/cms/folder">
+            <li
+              className="mt-4">
+              <span href="#home" className="flex pl-4">
+                <svg
+                  className="fill-current h-5 w-5 dark:text-gray-300"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6
+                    4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6
+                    4h4v-4h-4M4 8h4V4H4v4z"></path>
+                </svg>
+
+                <span className="ml-2 capitalize font-medium">Media Folders</span>
+              </span>
+            </li>
+          </MyLink>
 {/*
           <MyLink href="/cms/pages">
             <li
@@ -160,7 +178,7 @@ export function CMSLayout ({ children, isFull = false }) {
                     014-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4
                     8-4z"></path>
                 </svg>
-                <span className="ml-2 capitalize font-medium">users</span>
+                <span className="ml-2 capitalize font-medium">Users</span>
               </span>
             </li>
           </MyLink>

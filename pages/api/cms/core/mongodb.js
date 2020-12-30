@@ -38,38 +38,87 @@ SchemaExport.User = new Schema({
 
 module.exports.User = mongoose.models.User || mongoose.model('User', SchemaExport.User);
 
-// //-----------------------
+// ---------------------- //
 
-// SchemaExport.Posts = new Schema({
-//   featured: {
-//     type: Boolean,
-//     default: false
-//   },
+SchemaExport.Folder = new Schema({
+  //
+  featured: {
+    type: Boolean,
+    default: false
+  },
 
-//   userID: {
-//     type: Schema.Types.ObjectId,
-//     ref: 'User',
-//   },
-//   displayName: String,
-//   title: String,
-//   text: String,
-//   slug: {
-//     type: String,
-//     unique: true,
-//     index: true
-//   },
-// }, {
-//   timestamps: {
-//     createdAt: 'created_at',
-//     updatedAt: 'updated_at'
-//   }
-// })
+  userID: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 
-// module.exports.Posts = mongoose.models.Posts || mongoose.model('Posts', SchemaExport.Posts);
+  displayName: String,
+  title: String,
+  text: String,
+  slug: {
+    type: String,
+    unique: true,
+    index: true
+  },
+}, {
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+})
 
-// //-----------------------
+module.exports.Folder = mongoose.models.Folder || mongoose.model('Folder', SchemaExport.Folder);
+
+// ---------------------- //
+
+SchemaExport.Media = new Schema({
+  //
+  featured: {
+    type: Boolean,
+    default: false
+  },
+
+  folderID: {
+    type: Schema.Types.ObjectId,
+    ref: 'Folder',
+  },
+
+  userID: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
+
+  type: {
+    type: String,
+    default: 'cloudinary'
+  },
+
+  cloudinary: {
+    type: Schema.Types.Mixed
+  },
+
+  // displayName: String,
+  title: String,
+  text: String,
+
+  // slug: {
+  //   type: String,
+  //   unique: true,
+  //   index: true
+  // },
+}, {
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+})
+
+module.exports.Media = mongoose.models.Media || mongoose.model('Media', SchemaExport.Media);
+
+// ---------------------- //
 
 SchemaExport.Posts = new Schema({
+  //
   featured: {
     type: Boolean,
     default: false
@@ -97,36 +146,7 @@ SchemaExport.Posts = new Schema({
 
 module.exports.Posts = mongoose.models.Posts || mongoose.model('Posts', SchemaExport.Posts);
 
-//-----------------------
-
-// SchemaExport.Pages = new Schema({
-//   userID: {
-//     type: Schema.Types.ObjectId,
-//     ref: 'User',
-//   },
-//   type: {
-//     type: String,
-//     default: 'Page',
-//   },
-
-//   // Page, Profile
-//   displayName: String,
-//   slug: {
-//     type: String,
-//     unique: true,
-//     index: true
-//   },
-//   data: {}
-// }, {
-//   timestamps: {
-//     createdAt: 'created_at',
-//     updatedAt: 'updated_at'
-//   }
-// })
-
-// module.exports.Pages = mongoose.models.Pages || mongoose.model('Pages', SchemaExport.Pages);
-
-//---------
+// ----------------------- //
 
 module.exports.DocOperation = class DocOperation {
   constructor ({ req, res, DocClass, Auth }) {
@@ -182,11 +202,19 @@ module.exports.DocOperation = class DocOperation {
     })
   }
 
+  async adminListAll () {
+    this.tryRun(async () => {
+      await this.checkAdmin()
+      let result = await this.DocClass.find({}).sort('-createdAt')
+      this.res.status(200).json(result)
+    })
+  }
+
   async listMine () {
     this.tryRun(async () => {
       let { userID } = await this.getInfoFromJWT()
 
-      let result = await this.DocClass.find({ userID })
+      let result = await this.DocClass.find({ userID }).sort('-createdAt')
       this.res.status(200).json(result)
     })
   }
@@ -205,6 +233,16 @@ module.exports.DocOperation = class DocOperation {
 
       let query = this.req.body.data.query
       let result = await this.DocClass.findOne({ ...query, userID })
+      this.res.status(200).json(result)
+    })
+  }
+
+  async adminFilter () {
+    this.tryRun(async () => {
+      await this.checkAdmin()
+
+      let filter = this.req.body.data.filter
+      let result = await this.DocClass.find({ ...filter }).sort('-createdAt')
       this.res.status(200).json(result)
     })
   }
@@ -301,6 +339,41 @@ module.exports.DocOperation = class DocOperation {
 
       // module.exports.Project.
       await this.DocClass.findOneAndUpdate({ userID: user._id, _id: this.req.body.data._id }, newData)
+      let result = await this.DocClass.findOne({ _id: this.req.body.data._id })
+
+      if (result === null) {
+        this.res.status(404).json({
+          msg: 'obj not found',
+          _id: this.req.body.data._id
+        })
+      } else {
+        this.res.status(200).json(result)
+      }
+    })
+  }
+
+  async adminUpdate () {
+    this.tryRun(async () => {
+      let user = await this.checkOwner()
+
+      if (!user.isAdmin) {
+        throw new Error('is not admin')
+      }
+
+      let newData = this.req.body.data
+      delete newData.featured
+      delete newData.userID
+
+      if (newData.displayName) {
+        newData.slug = slugify(newData.displayName, {
+          replacement: '-',  // replace spaces with replacement character, defaults to `-`
+          lower: true,      // convert to lower case, defaults to `false`
+          strict: true     // strip special characters except replacement, defaults to `false`
+        })
+      }
+
+      // module.exports.Project.
+      await this.DocClass.findOneAndUpdate({ _id: this.req.body.data._id }, newData)
       let result = await this.DocClass.findOne({ _id: this.req.body.data._id })
 
       if (result === null) {

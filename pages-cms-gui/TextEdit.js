@@ -19,9 +19,9 @@ export const TextDisplay = ({ text }) => {
 }
 
 export const MediaLibraryPage = ({ onPick }) => {
-  return <div className={'h-36'}>
-    Media Library Page Place Holder
-    <button className={`p-3 border rounded-xl border-gray-600`} onClick={() => onPick({ descText: 'this is the description text of the image', imageURL: 'https://via.placeholder.com/350x150' })}>Place holder Button</button>
+  return <div className={'h-96'}>
+    Media Library Page Placeholder
+    <button className={`p-3 border rounded-xl border-gray-600`} onClick={() => onPick({ descText: 'this is the description text of the image', imageURL: 'https://via.placeholder.com/350x150' })}>Item Placeholder Button</button>
   </div>
 }
 
@@ -49,7 +49,6 @@ export const TextEdit = ({ value, onUpdate = () => {} }) => {
 
   let onPick = ({ descText, imageURL }) => {
     toggleRef.current(false)
-    console.log(editorRef.current)
     editorRef.current.insertText(`![${descText}](${imageURL})`)
   }
 

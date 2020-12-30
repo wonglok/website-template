@@ -1,28 +1,27 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { SDK } from '../../pages-cms-gui/api'
-import { CMSLayout } from '../../pages-cms-gui/CMSLayout'
+import { SDK } from '../../../pages-cms-gui/api'
+import { CMSLayout } from '../../../pages-cms-gui/CMSLayout'
+import { FolderLibGUI } from '../../../pages-cms-gui/MediaLibGUI'
 
 export function CMSApp () {
-  const router = useRouter()
   return (
-    <div>
-      <CMSLayout>
-        <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
-          Welcome to CMS
-        </h2>
-        <div>
-          Hi!
-        </div>
-      </CMSLayout>
-    </div>
+    <CMSLayout>
+      <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
+        Media Library
+      </h2>
+      <div>
+        <FolderLibGUI></FolderLibGUI>
+      </div>
+    </CMSLayout>
   )
 }
 
-export default function CMSLandingPage () {
+export default function MediaLandingPage () {
   const router = useRouter()
   const [canShow, setCanShow] = useState(false)
+
   useEffect(() => {
     if (!SDK.isLoggedIn) {
       router.push('/cms/login')
@@ -41,7 +40,6 @@ export default function CMSLandingPage () {
         <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png" />
         <link rel="icon" href="/fav/favicon.ico" />
       </Head>
-
       {
         canShow ? <CMSApp></CMSApp> : <div className="h-screen w-full flex items-center justify-center">Checking Login</div>
       }

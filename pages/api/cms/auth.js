@@ -28,6 +28,7 @@ module.exports = async (req, res) => {
         res.status(403).json({
           msg: e.message || 'bad credentials'
         })
+        //
         // throw e
       }
     } else if (req.body.action === 'register') {

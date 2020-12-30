@@ -1,3 +1,4 @@
+import imageCompression from 'browser-image-compression'
 import axios from 'axios'
 // import create from 'zustand'
 // import { compress, decompress } from 'shrink-string'
@@ -297,6 +298,24 @@ class DocOperation {
     })
   }
 
+  async adminListAll () {
+    let action = `admin-list-all`
+    return this.axios({
+      url: `${this.endpoint}?action=${action}`,
+      baseURL: this.baseURL,
+      method: 'POST',
+      data: {
+        jwt: this.jwt,
+        "data": {}
+      }
+    }).then(res => {
+      return res.data
+    }, (err) => {
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
+      return Promise.reject(msg)
+    })
+  }
+
   async listMine () {
     let action = `list-mine`
     return this.axios({
@@ -325,6 +344,26 @@ class DocOperation {
         jwt: this.jwt,
         "data": {
           query: query
+        }
+      }
+    }).then(res => {
+      return res.data
+    }, (err) => {
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
+      return Promise.reject(msg)
+    })
+  }
+
+  async adminFilter ({ filter }) {
+    let action = `admin-filter`
+    return this.axios({
+      url: `${this.endpoint}?action=${action}`,
+      baseURL: this.baseURL,
+      method: 'POST',
+      data: {
+        jwt: this.jwt,
+        "data": {
+          filter
         }
       }
     }).then(res => {
@@ -433,6 +472,46 @@ class DocOperation {
     })
   }
 
+  async adminUpdate ({ doc }) {
+    let action = `admin-update`
+    return this.axios({
+      url: `${this.endpoint}?action=${action}`,
+      baseURL: this.baseURL,
+      method: 'POST',
+      data: {
+        jwt: this.jwt,
+        "data": {
+          ...doc
+        }
+      }
+    }).then(res => {
+      return res.data
+    }, (err) => {
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
+      return Promise.reject(msg)
+    })
+  }
+
+  async adminDelete ({ doc }) {
+    let action = `admin-delete`
+    return this.axios({
+      url: `${this.endpoint}?action=${action}`,
+      baseURL: this.baseURL,
+      method: 'POST',
+      data: {
+        jwt: this.jwt,
+        "data": {
+          _id: doc._id
+        }
+      }
+    }).then(res => {
+      return res.data
+    }, (err) => {
+      let msg = (err.response || { data: { msg: 'err' } }).data.msg || `unable to ${action}`
+      return Promise.reject(msg)
+    })
+  }
+
   async deleteMine ({ doc }) {
     let action = `delete-mine`
     return this.axios({
@@ -464,6 +543,71 @@ class EndPointSDK extends DocOperation {
 export const SDK = new SDKCore({ axios })
 
 export const Posts = new EndPointSDK({ SDK, endpoint: `/api/cms/posts` })
+export const Folders = new EndPointSDK({ SDK, endpoint: `/api/cms/folders` })
+export const Media = new EndPointSDK({ SDK, endpoint: `/api/cms/media` })
+
+export const uploadImageToCloudinary = async ({ inputFile, UPLOAD_URL = `https://api.cloudinary.com/v1_1/loklok-keystone/image/upload` }) => {
+  const options = {
+    maxSizeMB: 2, // (default: Number.POSITIVE_INFINITY)
+    maxWidthOrHeight: 2048, // compressedFile will scale down by ratio to a point that width or height is smaller than maxWidthOrHeight (default: undefined)
+    useWebWorker: true, // optional, use multi-thread web worker, fallback to run in main-thread (default: true)
+    maxIteration: 4 // optional, max number of iteration to compress the image (default: 10)
+  }
+
+  let compressedImage = await imageCompression(inputFile, options)
+
+  let url = UPLOAD_URL
+  let formData = new FormData()
+
+  formData.append('file', compressedImage)
+  formData.append('upload_preset', '86deck-portfolio')
+
+  var config = {
+    onUploadProgress: (progressEvent) => {
+      var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+      console.log(percentCompleted)
+    }
+  }
+
+  let res = await axios.post(url, formData, config)
+  let cloudinary = res.data
+
+  // console.log(cloudinary)
+
+  // https://res.cloudinary.com/ht8mcws2o/image/upload/c_scale,w_150/v1570172749/spaceboard/fbb9uqtegper8vhy68dc.png
+  // http://res.cloudinary.com/ht8mcws2o/image/upload/v1570172749/spaceboard/fbb9uqtegper8vhy68dc.png
+
+  let thumb = cloudinary.secure_url.replace('/upload/', '/upload/w_256,h_256,c_fill,g_auto:0,q_auto/')
+  let square = cloudinary.secure_url.replace('/upload/', '/upload/w_1024,h_1024,c_fill,g_auto:0,q_auto/')
+  let auto = cloudinary.secure_url.replace(`/upload/`, `/upload/q_auto/`)
+  let rawURL = cloudinary.secure_url
+  // let base64 = await MyFiles.imageToURI(compressed.image)
+  // let resCloud = await new Promise((resolve, reject) => {
+  //   cloudinary.uploader.upload(base64, (error, result) => {
+  //     if (error) {
+  //       reject(error)
+  //     } else {
+  //       resolve(result)
+  //     }
+  //   })
+  // })
+  // console.log(resCloud)
+
+  let mime = inputFile.type
+  let filename = inputFile.name
+  let ext = inputFile.name.split('.').pop()
+
+  return {
+    thumb,
+    square,
+    auto,
+    rawURL,
+    mime,
+    filename,
+    ext,
+    ...cloudinary
+  }
+}
 
 // export const usePost = create((set, get) => {
 //   return {
