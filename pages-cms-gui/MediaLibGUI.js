@@ -351,5 +351,3 @@ export const MediaLibGUI = ({  }) => {
     </div>
   </div>)
 }
-
-//uploadImageToCloudinary

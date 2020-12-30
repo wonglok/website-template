@@ -3,7 +3,7 @@ import { TextDisplay } from '../../pages-cms-gui/TextEdit'
 import css from '../../pages-cms-gui/mardown.module.css'
 
 export async function getServerSideProps (context) {
-  let baseURL = 'https://website-template-tau.vercel.app'
+  let baseURL = 'https://86deck.withloklok.com'
   if (process.env.NODE_ENV === 'development') {
     baseURL = 'http://localhost:3000'
   }
