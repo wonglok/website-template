@@ -1,8 +1,9 @@
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 import create from "zustand"
+import cx from 'classnames'
 
-import { Folders, Media, uploadImageToCloudinary } from './api'
+import { Folders, Media, removeCloudianryImage, uploadImageToCloudinary } from './api'
 export const EMPTY_FOLDER = `/gui-assets/gallery/folder.jpg`
 export const CREATE_FOLDER = `/gui-assets/gallery/create.jpg`
 export const UPLOAD_ITEM = `/gui-assets/gallery/upload.jpg`
@@ -139,9 +140,9 @@ export const FolderLibGUI = ({}) => {
 
   return <>
     <div className={""}>
-      <h3 className="text-gray-700 text-2xl font-medium">Media File Folders</h3>
+      <h3 className="text-gray-700 text-2xl font-medium">Browse Folders</h3>
       <span className="mt-3 text-sm algin-middle text-gray-500">{folderCount}<span className={'text-xs algin-middle'}>+</span> Folders</span>
-      <div className={'grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 mt-6'}>
+      <div className={'grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6'}>
         <AddFolderItem></AddFolderItem>
         {GetFolders({ folders, router })}
       </div>
@@ -193,7 +194,7 @@ export const UploadMediaItem = () => {
   </div>
 }
 
-export const MediaItem = ({ item }) => {
+export const MediaItem = ({ isPicker = false, item }) => {
   const copy2clip = require('copy-text-to-clipboard')
   const removeMedia = useMedia(s => s.removeMedia)
   const updateText = useMedia(s => s.updateText)
@@ -242,33 +243,45 @@ export const MediaItem = ({ item }) => {
         canSkip(false)
       }
     }
+    let onKeyUp = (e) => {
+      canSkip(false)
+    }
     window.addEventListener('keydown', onKeydown)
+    window.addEventListener('keyup', onKeyUp)
     return () => {
       window.removeEventListener('keydown', onKeydown)
+      window.removeEventListener('keyup', onKeyUp)
     }
   }, [])
 
   const onRemoveItem = async () => {
     if (skip || window.confirm(`delete ${item.text} ?`)) {
       await removeMedia({ folderID, item })
+      // await removeCloudianryImage({ media: item })
     }
   }
 
   return <div className="group relative w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
     <div className="flex items-end justify-end h-56 w-full bg-cover bg-center" style={{ backgroundImage: `url(${item.cloudinary.thumb})` }}>
       <div onClick={onRemoveItem} className="absolute top-0 right-0 py-3 mr-3 text-shadow ">
-        <div className={"bg-red-500 p-1 rounded-full opacity-0 group-hover:opacity-100 "}>
-          <svg className=" cursor-pointer rounded-full focus:outline-none" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path fill="white" d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm0 10.293l5.293-5.293.707.707-5.293 5.293 5.293 5.293-.707.707-5.293-5.293-5.293 5.293-.707-.707 5.293-5.293-5.293-5.293.707-.707 5.293 5.293z"/></svg>
+        <div className={`bg-red-500 p-1 rounded-full ${cx({ 'opacity-0': !skip, 'opacity-100': skip })} group-hover:opacity-100`}>
+          {!skip && <svg className=" cursor-pointer rounded-full focus:outline-none" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path fill="white" d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm0 10.293l5.293-5.293.707.707-5.293 5.293 5.293 5.293-.707.707-5.293-5.293-5.293 5.293-.707-.707 5.293-5.293-5.293-5.293.707-.707 5.293 5.293z"/></svg>}
+          {skip && <svg className=" cursor-pointer rounded-full focus:outline-none" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path fill="white" d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.151 17.943l-4.143-4.102-4.117 4.159-1.833-1.833 4.104-4.157-4.162-4.119 1.833-1.833 4.155 4.102 4.106-4.16 1.849 1.849-4.1 4.141 4.157 4.104-1.849 1.849z"/></svg>}
         </div>
+
       </div>
 
-      <a target={`_${item._id}`} href={`${item.cloudinary.auto}`} className="p-4 rounded-full bg-blue-400 text-white mr-2 -mb-4 hover:bg-blue-500 focus:outline-none">
+      {skip && <div className="absolute top-0 right-0 mt-3 px-3 py-1 text-sm text-red-500 mr-12 text-shadow bg-white rounded-full">
+        <span>Delete without confirm</span>
+      </div>}
+
+      {isPicker && <a target={`_${item._id}`} href={`${item.cloudinary.auto}`} className="p-4 rounded-full bg-blue-400 text-white mr-2 -mb-4 hover:bg-blue-500 focus:outline-none">
         <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path fill="white" d="M14 4h-13v18h20v-11h1v12h-22v-20h14v1zm10 5h-1v-6.293l-11.646 11.647-.708-.708 11.647-11.646h-6.293v-1h8v8z"/></svg>
-      </a>
-      <a target={`_${item._id}`} href={`${item.cloudinary.auto}`} className="p-4 rounded-full bg-yellow-400 text-white mr-2 -mb-4 hover:bg-yellow-500 focus:outline-none">
-        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M12.02 0c6.614.011 11.98 5.383 11.98 12 0 6.623-5.376 12-12 12-6.623 0-12-5.377-12-12 0-6.617 5.367-11.989 11.981-12h.039zm3.694 16h-7.427c.639 4.266 2.242 7 3.713 7 1.472 0 3.075-2.734 3.714-7m6.535 0h-5.523c-.426 2.985-1.321 5.402-2.485 6.771 3.669-.76 6.671-3.35 8.008-6.771m-14.974 0h-5.524c1.338 3.421 4.34 6.011 8.009 6.771-1.164-1.369-2.059-3.786-2.485-6.771m-.123-7h-5.736c-.331 1.166-.741 3.389 0 6h5.736c-.188-1.814-.215-3.925 0-6m8.691 0h-7.685c-.195 1.8-.225 3.927 0 6h7.685c.196-1.811.224-3.93 0-6m6.742 0h-5.736c.062.592.308 3.019 0 6h5.736c.741-2.612.331-4.835 0-6m-12.825-7.771c-3.669.76-6.671 3.35-8.009 6.771h5.524c.426-2.985 1.321-5.403 2.485-6.771m5.954 6.771c-.639-4.266-2.242-7-3.714-7-1.471 0-3.074 2.734-3.713 7h7.427zm-1.473-6.771c1.164 1.368 2.059 3.786 2.485 6.771h5.523c-1.337-3.421-4.339-6.011-8.008-6.771"/></svg>
+      </a>}
+      {!isPicker && <a target={`_${item._id}`} href={`${item.cloudinary.auto}`} className="p-4 rounded-full bg-blue-400 text-white mr-2 -mb-4 hover:bg-blue-500 focus:outline-none">
+        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path fill="white" d="M12.02 0c6.614.011 11.98 5.383 11.98 12 0 6.623-5.376 12-12 12-6.623 0-12-5.377-12-12 0-6.617 5.367-11.989 11.981-12h.039zm3.694 16h-7.427c.639 4.266 2.242 7 3.713 7 1.472 0 3.075-2.734 3.714-7m6.535 0h-5.523c-.426 2.985-1.321 5.402-2.485 6.771 3.669-.76 6.671-3.35 8.008-6.771m-14.974 0h-5.524c1.338 3.421 4.34 6.011 8.009 6.771-1.164-1.369-2.059-3.786-2.485-6.771m-.123-7h-5.736c-.331 1.166-.741 3.389 0 6h5.736c-.188-1.814-.215-3.925 0-6m8.691 0h-7.685c-.195 1.8-.225 3.927 0 6h7.685c.196-1.811.224-3.93 0-6m6.742 0h-5.736c.062.592.308 3.019 0 6h5.736c.741-2.612.331-4.835 0-6m-12.825-7.771c-3.669.76-6.671 3.35-8.009 6.771h5.524c.426-2.985 1.321-5.403 2.485-6.771m5.954 6.771c-.639-4.266-2.242-7-3.714-7-1.471 0-3.074 2.734-3.713 7h7.427zm-1.473-6.771c1.164 1.368 2.059 3.786 2.485 6.771h5.523c-1.337-3.421-4.339-6.011-8.008-6.771"/></svg>
         {/* <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path fill="black" d="M14 4h-13v18h20v-11h1v12h-22v-20h14v1zm10 5h-1v-6.293l-11.646 11.647-.708-.708 11.647-11.646h-6.293v-1h8v8z"/></svg> */}
-      </a>
+      </a>}
     </div>
 
     <div className="px-5 py-3">
@@ -277,22 +290,24 @@ export const MediaItem = ({ item }) => {
       }}>
         <input className="text-gray-700 bg-transparent outline-none" value={displayName} type="text" onInput={e => { setDisplayName(e.target.value); setMsg('Click here to save.'); }} placeholder={item.cloudinary.filename} />
       </form>
+
         {/* {msg && <div className="mt-2 text-xs text-red-600 block">{msg}</div>} */}
         {/* <input type={'text'} className="text-gray-500 mt-2 underline text-xs " value={'My New Folder Title'} /> */}
       <div className={'flex flex-row'}>
         {msg && <div onClick={saveDisplayName} className="mt-2 text-xs text-green-600 block underline">{msg}</div>}
       </div>
+
       <div className={'flex flex-row'}>
         <div className=" text-gray-500 mt-2 text-xs inline-block mr-3">Copy Link: </div>
-        <div onClick={() => { copy(`${item.cloudinary.auto}`, displayName, 'link') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">AUTO</div>
-        <div onClick={() => { copy(`${item.cloudinary.thumb}`, displayName, 'link') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">THUMB</div>
-        <div onClick={() => { copy(`${item.cloudinary.rawURL}`, displayName, 'link') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">RAW</div>
+        <div onClick={() => { copy(`${item.cloudinary.auto}`, displayName, 'link') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">Auto</div>
+        <div onClick={() => { copy(`${item.cloudinary.thumb}`, displayName, 'link') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">Thumb</div>
+        <div onClick={() => { copy(`${item.cloudinary.rawURL}`, displayName, 'link') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">Original</div>
       </div>
       <div className={'flex flex-row'}>
         <div className=" text-gray-500 mt-2 text-xs inline-block mr-3">Copy Image: </div>
-        <div onClick={() => { copy(`${item.cloudinary.auto}`, displayName, 'tag') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">AUTO</div>
-        <div onClick={() => { copy(`${item.cloudinary.thumb}`, displayName, 'tag') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">THUMB</div>
-        <div onClick={() => { copy(`${item.cloudinary.rawURL}`, displayName, 'tag') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">RAW</div>
+        <div onClick={() => { copy(`${item.cloudinary.auto}`, displayName, 'tag') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">Auto</div>
+        <div onClick={() => { copy(`${item.cloudinary.thumb}`, displayName, 'tag') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">Thumb</div>
+        <div onClick={() => { copy(`${item.cloudinary.rawURL}`, displayName, 'tag') }} className=" cursor-pointer text-blue-500 mt-2 hover:text-blue-800 text-xs inline-block mr-3 select-none">Original</div>
       </div>
     </div>
   </div>
@@ -300,7 +315,7 @@ export const MediaItem = ({ item }) => {
 
 
 export const GetMediaItems = ({ mediaItems, router }) => {
-  return mediaItems.map(e => <MediaItem key={e._id} onPick={() => { router.push(`/cms/folder/${e._id}`) }} item={e}></MediaItem>)
+  return mediaItems.map(e => <MediaItem key={e._id} isPicker={false} onPick={() => { router.push(`/cms/folder/${e._id}`) }} item={e}></MediaItem>)
 }
 
 export const MediaLibGUI = ({  }) => {
@@ -314,9 +329,10 @@ export const MediaLibGUI = ({  }) => {
   let mediaCount = mediaItems.length || 0
 
   return (<div className={''}>
-    <h3 className="text-gray-700 text-2xl font-medium">Media File Folders</h3>
-    <span className="mt-3 text-sm algin-middle text-gray-500">{mediaCount}<span className={'text-xs algin-middle'}>+</span> Media Items</span>
-    <div className={'grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 mt-6'}>
+    <h3 className="text-gray-700 text-2xl font-medium">Image Files</h3>
+    <span className="mt-3 text-sm algin-middle text-gray-500 mr-3">{mediaCount}<span className={'text-xs algin-middle'}>+</span> Media Items</span>
+    <span className="block mt-1 text-sm algin-middle text-green-800">Press "ALT" Key to delete without confirm</span>
+    <div className={'grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6'}>
       <UploadMediaItem></UploadMediaItem>
       {/* <MediaItem></MediaItem> */}
       {GetMediaItems({ mediaItems, router })}

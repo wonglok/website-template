@@ -546,7 +546,17 @@ export const Posts = new EndPointSDK({ SDK, endpoint: `/api/cms/posts` })
 export const Folders = new EndPointSDK({ SDK, endpoint: `/api/cms/folders` })
 export const Media = new EndPointSDK({ SDK, endpoint: `/api/cms/media` })
 
-export const uploadImageToCloudinary = async ({ inputFile, UPLOAD_URL = `https://api.cloudinary.com/v1_1/loklok-keystone/image/upload` }) => {
+// export const removeCloudianryImage = async ({ media, account = 'loklok-keystone',  }) => {
+//   let URL = `https://api.cloudinary.com/v1_1/${account}/delete_by_token`
+//   let formData = new FormData()
+//   formData.append('token', media.cloudinary.delete_token)
+//   let config = {
+//   }
+//   await axios.post(URL, formData, config)
+//     .then(console.log, console.error)
+// }
+
+export const uploadImageToCloudinary = async ({ inputFile, account = 'loklok-keystone' }) => {
   const options = {
     maxSizeMB: 2, // (default: Number.POSITIVE_INFINITY)
     maxWidthOrHeight: 2048, // compressedFile will scale down by ratio to a point that width or height is smaller than maxWidthOrHeight (default: undefined)
@@ -556,11 +566,19 @@ export const uploadImageToCloudinary = async ({ inputFile, UPLOAD_URL = `https:/
 
   let compressedImage = await imageCompression(inputFile, options)
 
-  let url = UPLOAD_URL
+  // if (config) {
+
+  // }
+
+  let url = `https://api.cloudinary.com/v1_1/${account}/image/upload`
   let formData = new FormData()
 
   formData.append('file', compressedImage)
-  formData.append('upload_preset', '86deck-portfolio')
+  if (process.env.NODE_ENV === 'development') {
+    formData.append('upload_preset', 'wonglok-portfolio')
+  } else {
+    formData.append('upload_preset', '86deck-portfolio')
+  }
 
   var config = {
     onUploadProgress: (progressEvent) => {
@@ -577,7 +595,7 @@ export const uploadImageToCloudinary = async ({ inputFile, UPLOAD_URL = `https:/
   // https://res.cloudinary.com/ht8mcws2o/image/upload/c_scale,w_150/v1570172749/spaceboard/fbb9uqtegper8vhy68dc.png
   // http://res.cloudinary.com/ht8mcws2o/image/upload/v1570172749/spaceboard/fbb9uqtegper8vhy68dc.png
 
-  let thumb = cloudinary.secure_url.replace('/upload/', '/upload/w_256,h_256,c_fill,g_auto:0,q_auto/')
+  let thumb = cloudinary.secure_url.replace('/upload/', '/upload/w_512,h_512,c_fill,g_auto:0,q_auto/')
   let square = cloudinary.secure_url.replace('/upload/', '/upload/w_1024,h_1024,c_fill,g_auto:0,q_auto/')
   let auto = cloudinary.secure_url.replace(`/upload/`, `/upload/q_auto/`)
   let rawURL = cloudinary.secure_url
