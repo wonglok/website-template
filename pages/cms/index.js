@@ -15,10 +15,10 @@ export function CMSApp () {
           Welcome to CMS
         </h2>
         <div className="flex">
-          <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ height: '400px' }}>
+          <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ width: 400 + 'px', height: 400 * 1.618 + 'px' }}>
             <ChurchCanvas></ChurchCanvas>
           </div>
-          <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ height: '400px' }}>
+          <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ width: 400 + 'px', height: 400 * 1.618 + 'px' }}>
             <FighterCanvas></FighterCanvas>
           </div>
         </div>
