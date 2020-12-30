@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { SDK } from '../../pages-cms-gui/api'
 import { CMSLayout } from '../../pages-cms-gui/CMSLayout'
+import { FighterCanvas } from '../../your-3d/character/FighterCanvas'
 
 export function CMSApp () {
   const router = useRouter()
@@ -12,8 +13,8 @@ export function CMSApp () {
         <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
           Welcome to CMS
         </h2>
-        <div>
-
+        <div className={''} style={{ height: 'calc(80vh)' }}>
+          <FighterCanvas></FighterCanvas>
         </div>
       </CMSLayout>
     </div>
