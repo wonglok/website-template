@@ -62,7 +62,7 @@ export function  DeckCTA () {
         });
 
         cube.addEventListener("click", function () {
-          window.location.assign("http://86deck.com/work/");
+          // window.location.assign("http://86deck.com/work/");
         });
 
         function render(item, key) {

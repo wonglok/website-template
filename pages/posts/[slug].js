@@ -1,11 +1,12 @@
 import axios from 'axios'
 import { TextDisplay } from '../../pages-cms-gui/TextEdit'
+import { MAIN_SITE_DEV, MAIN_SITE_PROD } from '../../site-template.config'
 // import css from '../../pages-cms-gui/mardown.module.css'
 
 export async function getServerSideProps (context) {
-  let baseURL = 'https://86deck.withloklok.com'
+  let baseURL = MAIN_SITE_PROD
   if (process.env.NODE_ENV === 'development') {
-    baseURL = 'http://localhost:3000'
+    baseURL = MAIN_SITE_DEV
   }
 
   try {

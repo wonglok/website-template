@@ -13,7 +13,7 @@ export function CMSApp () {
           Welcome to CMS
         </h2>
         <div>
-          Hi!
+
         </div>
       </CMSLayout>
     </div>

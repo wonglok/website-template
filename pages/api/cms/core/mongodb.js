@@ -1,8 +1,9 @@
 const slugify = require('slugify')
 const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
+const { DB_NAME } = require('../../../../site-template.config');
 mongoose.set('useCreateIndex', true);
-let DBNAME = `db86deck`
+let DBNAME = DB_NAME
 let KADB = process.env.MONGO_URL || `mongodb://localhost:27017/${DBNAME}?readPreference=primary&appname=MongoDB%20Compass&ssl=false`
 mongoose.connect(KADB, { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true });
 

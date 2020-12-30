@@ -1,5 +1,6 @@
 import imageCompression from 'browser-image-compression'
 import axios from 'axios'
+import { CLOUDINARY_ACCOUNT, CLOUDINARY_UPLOAD_PRESET_DEV, CLOUDINARY_UPLOAD_PRESET_PROD } from '../site-template.config'
 // import create from 'zustand'
 // import { compress, decompress } from 'shrink-string'
 // import { proxy, useProxy } from 'valtio'
@@ -546,7 +547,7 @@ export const Posts = new EndPointSDK({ SDK, endpoint: `/api/cms/posts` })
 export const Folders = new EndPointSDK({ SDK, endpoint: `/api/cms/folders` })
 export const Media = new EndPointSDK({ SDK, endpoint: `/api/cms/media` })
 
-// export const removeCloudianryImage = async ({ media, account = 'loklok-keystone',  }) => {
+// export const removeCloudianryImage = async ({ media, account = CLOUDINARY_ACCOUNT,  }) => {
 //   let URL = `https://api.cloudinary.com/v1_1/${account}/delete_by_token`
 //   let formData = new FormData()
 //   formData.append('token', media.cloudinary.delete_token)
@@ -556,7 +557,7 @@ export const Media = new EndPointSDK({ SDK, endpoint: `/api/cms/media` })
 //     .then(console.log, console.error)
 // }
 
-export const uploadImageToCloudinary = async ({ inputFile, account = 'loklok-keystone' }) => {
+export const uploadImageToCloudinary = async ({ inputFile, account = CLOUDINARY_ACCOUNT }) => {
   const options = {
     maxSizeMB: 2, // (default: Number.POSITIVE_INFINITY)
     maxWidthOrHeight: 2048, // compressedFile will scale down by ratio to a point that width or height is smaller than maxWidthOrHeight (default: undefined)
@@ -575,9 +576,11 @@ export const uploadImageToCloudinary = async ({ inputFile, account = 'loklok-key
 
   formData.append('file', compressedImage)
   if (process.env.NODE_ENV === 'development') {
-    formData.append('upload_preset', 'wonglok-portfolio')
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET_DEV)
+  } else if (process.env.NODE_ENV === 'production') {
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET_PROD)
   } else {
-    formData.append('upload_preset', '86deck-portfolio')
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET_PREVIEW)
   }
 
   var config = {

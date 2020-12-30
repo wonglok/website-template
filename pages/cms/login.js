@@ -4,6 +4,7 @@ import { SDK } from '../../pages-cms-gui/api'
 // import { Cloudinary } from '../../pages-cms-gui/Cloudinary'
 import Head from 'next/head'
 import Link from 'next/link'
+import { LOGIN_KEY_VISUAL_TYPE, LOGIN_KEY_VISUAL_IFRAME, LOGIN_KEY_VISUAL_IMAGE } from '../../site-template.config'
 
 function LoginSection () {
   const router = useRouter()
@@ -20,6 +21,9 @@ function LoginSection () {
         setMessage(err.msg)
       })
   }
+
+  //
+
   const onKeyInfo = setValue => e => setValue(e.target.value)
 
   return (
@@ -60,10 +64,14 @@ function LoginSection () {
                   </div>
               </div>
             </div>
+
             <div className="w-1/2 shadow-2xl">
-              <iframe className="object-cover w-full h-screen hidden md:block" frameBorder="0" src="/86deck-main-art.html"></iframe>
-                {/* <Cloudinary src="/v1608679671/86deck-portfolio/hello.png" className="object-cover w-full h-screen hidden md:block"></Cloudinary> */}
-                {/* <img className="object-cover w-full h-screen hidden md:block" src="https://source.unsplash.com/IXUM4cJynP0" /> */}
+            {LOGIN_KEY_VISUAL_TYPE === 'iframe' &&
+            <iframe className="object-cover w-full h-screen hidden md:block" frameBorder="0" src={LOGIN_KEY_VISUAL_IFRAME}></iframe>
+            }
+            {LOGIN_KEY_VISUAL_TYPE === 'image' &&
+            <img className="object-cover w-full h-screen hidden md:block" src={LOGIN_KEY_VISUAL_IMAGE} />
+            }
             </div>
           </div>
         </div>
