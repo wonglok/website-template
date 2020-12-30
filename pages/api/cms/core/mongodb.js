@@ -205,7 +205,7 @@ module.exports.DocOperation = class DocOperation {
   async adminListAll () {
     this.tryRun(async () => {
       await this.checkAdmin()
-      let result = await this.DocClass.find({}).sort('-createdAt')
+      let result = await this.DocClass.find({}).sort('-created_at')
       this.res.status(200).json(result)
     })
   }
@@ -214,7 +214,7 @@ module.exports.DocOperation = class DocOperation {
     this.tryRun(async () => {
       let { userID } = await this.getInfoFromJWT()
 
-      let result = await this.DocClass.find({ userID }).sort('-createdAt')
+      let result = await this.DocClass.find({ userID }).sort('-created_at')
       this.res.status(200).json(result)
     })
   }
@@ -242,7 +242,7 @@ module.exports.DocOperation = class DocOperation {
       await this.checkAdmin()
 
       let filter = this.req.body.data.filter
-      let result = await this.DocClass.find({ ...filter }).sort('-createdAt')
+      let result = await this.DocClass.find({ ...filter }).sort('-created_at')
       this.res.status(200).json(result)
     })
   }

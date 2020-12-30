@@ -218,16 +218,19 @@ export const MediaItem = ({ item }) => {
     setMsg(`Saved.`)
     setTimeout(() => {
       setMsg(`Saved..`)
-    }, 400 * 1)
+    }, 1000 / 4 * 1)
     setTimeout(() => {
       setMsg(`Saved...`)
-    }, 400 * 2)
+    }, 1000 / 4 * 2)
     setTimeout(() => {
       setMsg(`Saved...`)
-    }, 400 * 3)
+    }, 1000 / 4 * 3)
+    setTimeout(() => {
+      setMsg(`Saved....`)
+    }, 1000 / 4 * 4)
     setTimeout(() => {
       setMsg(``)
-    }, 1400)
+    }, 1000)
   }
 
   const [skip, canSkip] = useState(false)

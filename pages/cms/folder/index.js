@@ -9,7 +9,7 @@ export function CMSApp () {
   return (
     <CMSLayout>
       <h2 className="my-4 mt-6 text-4xl font-semibold dark:text-gray-400">
-        Media Library
+        Folders
       </h2>
       <div>
         <FolderLibGUI></FolderLibGUI>
