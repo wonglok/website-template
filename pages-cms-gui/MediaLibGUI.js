@@ -216,7 +216,7 @@ export const MediaItem = ({ isPicker = false, item }) => {
       return copy2clip(`${str}`)
     }
   }
-  //
+
   const saveDisplayName = async () => {
     setMsg(`Saving....`)
 
@@ -241,6 +241,7 @@ export const MediaItem = ({ isPicker = false, item }) => {
   }
 
   const [skip, canSkip] = useState(false)
+
   useEffect(() => {
     let onKeydown = (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) {
@@ -297,11 +298,12 @@ export const MediaItem = ({ isPicker = false, item }) => {
       <form onSubmit={(e) => {
         e.preventDefault();
       }}>
-        <input className="text-gray-700 bg-transparent outline-none" value={displayName} type="text" onInput={e => { setDisplayName(e.target.value); setMsg('Click here to save.'); }} placeholder={item.cloudinary.filename} />
+        <input className="text-gray-700 bg-transparent outline-none w-full" value={displayName} type="text" onInput={e => { setDisplayName(e.target.value); setMsg('Click here to save.'); }} placeholder={item.cloudinary.filename} />
       </form>
 
         {/* {msg && <div className="mt-2 text-xs text-red-600 block">{msg}</div>} */}
         {/* <input type={'text'} className="text-gray-500 mt-2 underline text-xs " value={'My New Folder Title'} /> */}
+
       <div className={'flex flex-row'}>
         {msg && <div onClick={saveDisplayName} className="mt-2 text-xs text-green-600 block underline">{msg}</div>}
       </div>
@@ -342,7 +344,7 @@ export const MediaLibGUI = ({  }) => {
     <Link href="/cms/folder"><h3 className="text-gray-700 text-sm font-medium underline cursor-pointer">Go Back to Folders Page</h3></Link>
     {/* <span className="mt-3 text-sm algin-middle text-gray-500 mr-3">{mediaCount}<span className={'text-xs algin-middle'}>+</span> Media Items</span> */}
     {(mediaCount > 0) && <span className="block mt-1 text-sm algin-middle text-green-800">Press "ALT" Key to delete without confirm</span>}
-    <div className={'grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6'}>
+    <div className={'grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mt-6'}>
       <UploadMediaItem></UploadMediaItem>
       {/* <MediaItem></MediaItem> */}
       {GetMediaItems({ mediaItems, router })}
