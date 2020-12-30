@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { TextDisplay } from '../../pages-cms-gui/TextEdit'
-import css from '../../pages-cms-gui/mardown.module.css'
+// import css from '../../pages-cms-gui/mardown.module.css'
 
 export async function getServerSideProps (context) {
   let baseURL = 'https://86deck.withloklok.com'

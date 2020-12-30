@@ -9,7 +9,7 @@ import css from './mardown.module.css'
 import 'react-markdown-editor-lite/lib/index.css';
 import { Modal } from './Modal';
 import _debounce from 'lodash/debounce'
-
+import { FolderLibGUI, MediaLibGUI } from './MediaLibGUI'
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
 export const TextDisplay = ({ text }) => {
@@ -19,9 +19,20 @@ export const TextDisplay = ({ text }) => {
 }
 
 export const MediaLibraryPage = ({ onPick }) => {
-  return <div className={'h-96'}>
-    Media Library Page Placeholder
-    <button className={`p-3 border rounded-xl border-gray-600`} onClick={() => onPick({ descText: 'this is the description text of the image', imageURL: 'https://via.placeholder.com/350x150' })}>Item Placeholder Button</button>
+  const [view, setView] = useState('folder')
+  const [folderID, setFolderID] = useState('')
+  const onPickFolder = ({ folderID }) => {
+    setView('detail')
+    setFolderID(folderID)
+  }
+  const onPickImage = ({ media }) => {
+    onPick({ descText: media.text, imageURL: media.cloudinary.auto })
+  }
+  return <div className=" overflow-scroll" style={{ height: 'calc(100vh - 300px)' }}>
+    {view === 'folder' && <FolderLibGUI onPick={onPickFolder}></FolderLibGUI>}
+    {view === 'detail' && folderID && <div className="underline" onClick={() => { setView('folder') }}>Back to Folders Picker Page</div>}
+    {view === 'detail' && folderID && <MediaLibGUI onPickImage={onPickImage}></MediaLibGUI>}
+    {/* <button className={`p-3 border rounded-xl border-gray-600`} onClick={() => onPick({ descText: 'this is the description text of the image', imageURL: 'https://via.placeholder.com/350x150' })}>Item Placeholder Button</button> */}
   </div>
 }
 
@@ -32,7 +43,6 @@ export const TextEdit = ({ value, onUpdate = () => {} }) => {
   const editorRef = useRef()
   const timerRef = useRef()
   function handleEditorChange ({ html, text }) {
-    // console.log('handleEditorChange', html, text)
     onUpdate({ html, text })
     setInput(text)
   }
@@ -40,7 +50,7 @@ export const TextEdit = ({ value, onUpdate = () => {} }) => {
   let install = ({ toggle }) => {
     toggleRef.current = toggle
   }
-  //
+
   useEffect(() => {
     setInput(value)
     return () => {
@@ -59,7 +69,9 @@ export const TextEdit = ({ value, onUpdate = () => {} }) => {
           <MediaLibraryPage onPick={onPick}></MediaLibraryPage>
         </div>
       </Modal>
+
       <button onClick={() => { toggleRef.current(true) }} className={'py-2 px-3 text-xs my-1 rounded-lg border border-gray-600'}>Pick image</button>
+
       <Editor
         ref={editorRef}
         style={{ height: '680px' }}
@@ -71,11 +83,9 @@ export const TextEdit = ({ value, onUpdate = () => {} }) => {
             timerRef.current = setTimeout(() => {
               let html = mdParser.render(text)
               resolve(html)
-            }, 1500)
+            }, 1000)
           })
         }}
-
-        // onImageUpload={onImageUpload}
 
         onChange={handleEditorChange}
       />

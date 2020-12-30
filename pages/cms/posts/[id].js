@@ -30,15 +30,18 @@ export const usePost = create((set, get) => {
       set({ post: JSON.parse(JSON.stringify(post)), dirty: true })
     },
     loadPost: async ({ _id }) => {
-      let val = await Posts.findOneMine({ query: { _id } })
-      set({ post: val, msg: '', dirty: false })
+      let vals = await Posts.adminFilter({ filter: { _id } })
+      let val = vals[0]
+      if (val) {
+        set({ post: val, msg: '', dirty: false })
+      }
     },
     savePost: async ({ post }) => {
       window.onbeforeunload = undefined
       delete window.onbeforeunload
 
       set({ saveBtnStatus: 'Saving to cloud...' })
-      await Posts.updateMine({ doc: post })
+      await Posts.adminUpdate({ doc: post })
         .then((post) => {
           set({ saveBtnStatus: 'Saved to cloud' })
           set({ post, msg: '', dirty: false })

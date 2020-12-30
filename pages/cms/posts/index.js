@@ -22,7 +22,7 @@ function PageActions ({ row, reload }) {
       className={`bg-${'red'}-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1`}
       type="button"
       style={{ transition: "all .15s ease" }}
-      onClick={() => { Posts.deleteMine({ doc: row }).then(reload) }}
+      onClick={() => { Posts.adminDelete({ doc: row }).then(reload) }}
     >
       {'Delete'}
     </button>
@@ -62,7 +62,7 @@ function PageDataRows ({ data, reload }) {
 }
 
 function DataTablePost ({  }) {
-  let { revalidate, data, err } = useSWR('listMine', key => Posts[key]({  }))
+  let { revalidate, data, err } = useSWR('adminListAll', key => Posts[key]({  }))
   data = data || []
   data = data.map(e => {
     return {
