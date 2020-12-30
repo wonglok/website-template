@@ -84,12 +84,12 @@ function MyScene () {
       camera.position.x += evt.deltaX * rate
       controls.current.target.x += evt.deltaX * rate
     }
-    window.addEventListener('wheel', onWheel, { passive: false })
+    gl.domElement.addEventListener('wheel', onWheel, { passive: false })
 
     return () => {
       controls.current.dispose()
       window.removeEventListener('resize', onResize)
-      window.removeEventListener('wheel', onWheel)
+      gl.domElement.removeEventListener('wheel', onWheel)
     }
   })
 

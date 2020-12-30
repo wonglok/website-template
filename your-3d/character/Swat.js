@@ -5,8 +5,8 @@ import React, { useEffect, useRef, useState, useMemo } from "react"
 import { useLoader, useFrame, useGraph, useThree } from "react-three-fiber"
 import { getMouseDegrees } from "./utils"
 
-function moveJoint(mouse, joint, degreeLimit = 40) {
-  let degrees = getMouseDegrees(mouse.current.x, mouse.current.y, degreeLimit)
+function moveJoint(mouse, joint, degreeLimit = 40, w, h) {
+  let degrees = getMouseDegrees(mouse.current.x, mouse.current.y, degreeLimit, w, h)
   joint.rotation.xD = THREE.MathUtils.lerp(joint.rotation.xD || 0, degrees.y, 0.1)
   joint.rotation.yD = THREE.MathUtils.lerp(joint.rotation.yD || 0, degrees.x, 0.1)
   joint.rotation.x = THREE.Math.degToRad(joint.rotation.xD)
@@ -22,6 +22,7 @@ export function Swat ({ onReady = () => {}, envMap, bus, mouse, ...props }) {
     return SkeletonUtils.clone(scene)
   }, [scene])
 
+  const { gl } = useThree()
 
   const group = useRef()
   const idle = useRef()
@@ -98,8 +99,8 @@ export function Swat ({ onReady = () => {}, envMap, bus, mouse, ...props }) {
   })
 
   useFrame(() => {
-    moveJoint(mouse, nodes.mixamorigNeck)
-    moveJoint(mouse, nodes.mixamorigSpine, 25)
+    moveJoint(mouse, nodes.mixamorigNeck, 40, gl.domElement.width)
+    moveJoint(mouse, nodes.mixamorigSpine, 25, gl.domElement.height)
     let position = new THREE.Vector3()
     position.setFromMatrixPosition(nodes['mixamorigHead'].matrixWorld)
     bus.emit('swat-head', { position })

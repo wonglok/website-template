@@ -5,7 +5,7 @@ export function getFirstTouchPos(e) {
   return { x: e.touches[0].clientX, y: e.touches[0].clientY }
 }
 
-export function getMouseDegrees(x, y, degreeLimit) {
+export function getMouseDegrees(x = 0, y = 0, degreeLimit = 40, canvasWidth = window.innerWidth, canvasHeight = window.innerHeight) {
   let dx = 0,
     dy = 0,
     xdiff,
@@ -13,7 +13,7 @@ export function getMouseDegrees(x, y, degreeLimit) {
     ydiff,
     yPercentage
 
-  let w = { x: window.innerWidth, y: window.innerHeight }
+  let w = { x: canvasWidth, y: canvasHeight }
 
   // Left (Rotates neck left between 0 and -degreeLimit)
   // 1. If cursor is in the left half of screen
