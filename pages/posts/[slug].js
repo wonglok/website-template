@@ -24,6 +24,7 @@ export async function getServerSideProps (context) {
       }
     })
 
+    //
     let data = res.data
 
     return {

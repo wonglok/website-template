@@ -19,9 +19,7 @@ export default function Home() {
       <DeckMainArt></DeckMainArt>
 
       {/* <DeckCTA></DeckCTA> */}
-
       {/* <DeckCTA></DeckCTA> */}
-
       {/* <DeckCTA></DeckCTA> */}
 
       <div className="flex max-w-7xl mx-auto mt-12 ">
@@ -33,9 +31,29 @@ export default function Home() {
         </div>
       </div>
 
+      <DeckCTA>
+
+      </DeckCTA>
+
       <div className="h-96"></div>
     </div>
   )
 }
+
+//
+
+//
+
+//
+
+//
+
+//
+
+//
+
+//
+
+//
 
 //
