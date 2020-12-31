@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { SDK } from '../../pages-cms-gui/api'
 import { CMSLayout } from '../../pages-cms-gui/CMSLayout'
-import { ChurchCanvas } from '../../your-3d/church/ChurchCanvas'
-import { FighterCanvas } from '../../your-3d/character/FighterCanvas'
+// import { ChurchCanvas } from '../../your-3d/church/ChurchCanvas'
+// import { FighterCanvas } from '../../your-3d/character/FighterCanvas'
 
 export function CMSApp () {
   // const router = useRouter()
@@ -15,12 +15,12 @@ export function CMSApp () {
           Welcome to CMS
         </h2>
         <div className="flex">
-          <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ width: 400 + 'px', height: 400 * 1.618 + 'px' }}>
+          {/* <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ width: 400 + 'px', height: 400 * 1.618 + 'px' }}>
             <ChurchCanvas></ChurchCanvas>
-          </div>
-          <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ width: 400 + 'px', height: 400 * 1.618 + 'px' }}>
+          </div> */}
+          {/* <div className={' w-1/3 mr-6 rounded-3xl overflow-hidden mb-6'} style={{ width: 400 + 'px', height: 400 * 1.618 + 'px' }}>
             <FighterCanvas></FighterCanvas>
-          </div>
+          </div> */}
         </div>
       </CMSLayout>
     </div>

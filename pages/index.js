@@ -22,18 +22,16 @@ export default function Home() {
       {/* <DeckCTA></DeckCTA> */}
       {/* <DeckCTA></DeckCTA> */}
 
-      <div className="flex max-w-7xl mx-auto mt-12 ">
+      {/* <div className="flex max-w-7xl mx-auto mt-12 ">
         <div className={' w-1/3 mx-6 rounded-3xl overflow-hidden mb-6'} style={{ width: 380 + 'px', height: 380 * 1.618 + 'px' }}>
           <ChurchCanvas></ChurchCanvas>
         </div>
         <div className={' w-1/3 mx-6 rounded-3xl overflow-hidden mb-6'} style={{ width: 380 + 'px', height: 380 * 1.618 + 'px' }}>
           <FighterCanvas></FighterCanvas>
         </div>
-      </div>
+      </div> */}
 
-      <DeckCTA>
-
-      </DeckCTA>
+      <DeckCTA></DeckCTA>
 
       <div className="h-96"></div>
     </div>
