@@ -1,7 +1,7 @@
 let CONFIG = module.exports = module.exports || {}
 
 CONFIG.BRAND = '86deck'
-CONFIG.MAIN_SITE_DEV = `'http://localhost:3000'`
+CONFIG.MAIN_SITE_DEV = `http://localhost:3000`
 CONFIG.MAIN_SITE_PROD = `https://86deck.withloklok.com`
 
 CONFIG.DB_NAME = `db86deck`

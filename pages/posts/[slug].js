@@ -33,11 +33,15 @@ export async function getServerSideProps (context) {
       }
     }
   } catch (e) {
+    let msg = 'notfound'
+    if (e.response && e.response.data && e.response.data.msg) {
+      msg = e.response.data.msg
+    }
     console.log(e)
     return {
       props: {
         error: {
-          msg: e.response.data.msg,
+          msg,
           isError: true
         }
       }
