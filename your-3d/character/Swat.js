@@ -99,8 +99,8 @@ export function Swat ({ onReady = () => {}, envMap, bus, mouse, ...props }) {
   })
 
   useFrame(() => {
-    moveJoint(mouse, nodes.mixamorigNeck, 40, gl.domElement.width)
-    moveJoint(mouse, nodes.mixamorigSpine, 25, gl.domElement.height)
+    moveJoint(mouse, nodes.mixamorigNeck, 40, window.innerWidth, window.innerHeight)
+    moveJoint(mouse, nodes.mixamorigSpine, 25, window.innerWidth, window.innerHeight)
     let position = new THREE.Vector3()
     position.setFromMatrixPosition(nodes['mixamorigHead'].matrixWorld)
     bus.emit('swat-head', { position })

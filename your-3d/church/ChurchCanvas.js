@@ -90,10 +90,9 @@ function MyScene () {
     return () => {
       controls.current.dispose()
       window.removeEventListener('resize', onResize)
-      if (!(gl && gl.domElement)) {
-        return
+      if ((gl && gl.domElement)) {
+        gl.domElement.removeEventListener('wheel', onWheel)
       }
-      gl.domElement.removeEventListener('wheel', onWheel)
     }
   })
 

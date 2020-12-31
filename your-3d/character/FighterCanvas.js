@@ -81,8 +81,10 @@ export function MyScene ({ mouse, ...props }) {
   const d = 15
 
   useEffect(() => {
-    mouse.current.x = gl.domElement.width / 2
-    mouse.current.y = gl.domElement.height / 2
+    if (gl.domElement) {
+      mouse.current.x = gl.domElement.width / 2
+      mouse.current.y = gl.domElement.height / 2
+    }
   })
 
   const [charPos] = useState([0 * 6.4, -10, 0])
@@ -117,7 +119,7 @@ export function MyScene ({ mouse, ...props }) {
       bus.off('swat-head', onHeadPositionUpdate)
       controls.current.dispose()
     }
-  })
+  }, [gl])
 
   useFrame(() => {
     controls.current.update()
@@ -213,7 +215,14 @@ let css = v => v[0]
 export function FighterCanvas () {
   const mouse = useRef({ x: 0, y: 0 })
 
-
+  useEffect(() => {
+    window.addEventListener('mousemove', (e) => {
+      mouse.current = getMousePos(e)
+    })
+    window.addEventListener('touchmove', (e) => {
+      mouse.current = getFirstTouchPos(e)
+    })
+  })
   return (
     <>
     <style>
