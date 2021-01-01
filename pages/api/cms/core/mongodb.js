@@ -149,6 +149,22 @@ module.exports.Posts = mongoose.models.Posts || mongoose.model('Posts', SchemaEx
 
 // ----------------------- //
 
+
+SchemaExport.Contact = new Schema({
+  email: String,
+  message: String,
+  date: { type: Date }
+}, {
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+})
+
+module.exports.Contact = mongoose.models.Contact || mongoose.model('Contact', SchemaExport.Contact);
+
+// ----------------------- //
+
 module.exports.DocOperation = class DocOperation {
   constructor ({ req, res, DocClass, Auth }) {
     this.req = req
