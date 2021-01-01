@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import create from "zustand"
 import cx from 'classnames'
 import { Folders, Media, uploadImageToCloudinary } from './api'
@@ -46,7 +46,7 @@ export const useMedia = create((set, get) => {
     onArrive: async ({ folderID }) => {
       set({ mediaItems: [] })
       let mediaItems = await Media.adminFilter({ filter: { folderID } })
-      console.log(mediaItems)
+      console.log(folderID, mediaItems)
       set({ mediaItems })
     },
     removeMedia: async ({ folderID, item }) => {
@@ -141,7 +141,7 @@ export const FolderLibGUI = ({ onPick }) => {
   const onArrive = useFolders(s => s.onArrive)
   useEffect(() => {
     onArrive()
-  }, [])
+  }, [router.query.id])
   const folderCount = folders.length || 0
 
   return <>
@@ -335,9 +335,11 @@ export const MediaLibGUI = ({ onPickImage = false }) => {
   const router = useRouter()
   const mediaItems = useMedia(s => s.mediaItems)
   const onArrive = useMedia(s => s.onArrive)
-  useEffect(() => {
-    onArrive({ folderID: router.query.id })
-  }, [])
+  useMemo(() => {
+    if (router.query.id) {
+      onArrive({ folderID: router.query.id })
+    }
+  }, [router.query.id])
 
   let mediaCount = mediaItems.length || 0
 
